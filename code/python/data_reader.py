@@ -52,11 +52,11 @@ for line in prob_lines[0]:
     # prob_B = line[7]
     # val2_B = line[8]
     # stdd_B = line[9]
-    subj_id = line[10]
-    trial_id  = line[11]
-    choice = line[12]
-    outcome = line[13]
-    forgone = line[14]
+    subj_id = int(line[10])
+    trial_id  = int(line[11])
+    choice = int(line[12])
+    outcome = float(line[13])
+    forgone = float(line[14])
 
     trial = Trial(trial_id, choice, outcome, forgone)
 
@@ -65,10 +65,14 @@ for line in prob_lines[0]:
 
     subjects[subj_id].add_trial(prob_id, trial)
 
-for subject in subjects.values():
-    fit(subject,prob_id)
+# fitting routine
+nActions = 2
+nStates = 2
 
-    raw_input()
+for subject in subjects.values():
+    NLL, params = fit(subject,prob_id,nActions,nStates)
+    print 'subj {}, NLL {} with params {}'.format(subject.subject_id,NLL,params)
+    #raw_input()
 # print "prob {0}, subj {1}, trial {2}, choice {3}, outcome {4}".format(1, subj_id, trial, choice, outcome)
 
 
