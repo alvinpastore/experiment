@@ -1,11 +1,11 @@
 from Subject import Subject
-from Subject import Trial
+from Trial import Trial
 
 
 class DataReader:
 
     def __init__(self, data_file_name):
-        self.subjects = {}
+        self.problems = {}
         # id of the problem from thaler_et_al_1997 and barron_erev_2003
         self.thaler_problem_id1 = 34
         self.thaler_problem_id2 = 35
@@ -94,10 +94,12 @@ class DataReader:
                 prob_lines[2].append(line)
 
         print "thaler problem 1 " + str(prob_lines[0].__len__()) + "lines"
-        print "thaler problem 2 " + str(prob_lines[0].__len__()) + "lines"
-        print "thaler problem 3 " + str(prob_lines[0].__len__()) + "lines"
+        print "thaler problem 2 " + str(prob_lines[1].__len__()) + "lines"
+        print "thaler problem 3 " + str(prob_lines[2].__len__()) + "lines"
 
         for prob_id in [1, 2, 3]:
+
+            subjects = {}
 
             # rearranging prob_id lines into subjects
             for line in prob_lines[prob_id - 1]:
@@ -117,11 +119,13 @@ class DataReader:
 
                 trial = Trial(trial_id, choice, outcome, forgone)
 
-                if subj_id not in self.subjects.keys():
-                    self.subjects[subj_id] = Subject(subj_id)
+                if subj_id not in subjects.keys():
+                    subjects[subj_id] = Subject(subj_id)
 
-                self.subjects[subj_id].add_trial(prob_id, trial)
+                subjects[subj_id].add_trial(trial)
 
-        return self.subjects
+            self.problems[prob_id - 1] = subjects
+
+        return self.problems
 
 
