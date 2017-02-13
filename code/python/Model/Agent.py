@@ -7,12 +7,17 @@ import constants
 class Agent:
 
     def __init__(self, theta, state_config, learning_rule, reward_function):
+
+        if state_config == constants.STATELESS and learning_rule == constants.Q_LEARNING:
+            print 'Cannot combine Q-Learning with stateless configuration, exiting...'
+            exit()
+
         self.likelihood = 0
-        self.params = theta
         self.state_config = state_config
         self.learning_rule = learning_rule
         self.reward_function = reward_function
         self.n_actions = 2
+        self.n_states = 0 if state_config == constants.STATELESS else 2
         self.initial_action_value = 0
         self.accumulated_payoffs = 0
         self.current_state = 0
@@ -21,7 +26,7 @@ class Agent:
         if self.state_config == constants.STATELESS:
             self.action_values = [self.initial_action_value for act_i in xrange(self.n_actions)]
         else:   # two-state case (both latest transaction or full history)
-            self.action_values = [[self.initial_action_value for act_i in xrange(self.n_actions)] for state_i in xrange()]
+            self.action_values = [[self.initial_action_value for act_i in xrange(self.n_actions)] for state_i in xrange(self.n_states)]
 
         # unpack parameter array theta (extract gamma only if using qlearning, not if using average-tracking)
         self.alpha = theta[0]
@@ -42,17 +47,28 @@ class Agent:
         self.likelihood += log_probability
 
     def select_action(self, selected_action):
-        # implements softmax action selection rule
-        # returns log_probability of selecting selected_action
+        # implements softmax action selection rule according to the state space configuration
+        # uses the resulting  action_log_probability to update the likelihood of the agent
 
         denominator = 0
-        for a in xrange(self.n_actions):
-            denominator += np.exp(self.beta * self.action_values[self.current_state][a])
-        action_log_probability = self.beta * self.action_values[self.current_state][selected_action] - log(denominator)
-        return action_log_probability
+
+        if self.state_config == constants.STATELESS:
+            for act_i in xrange(self.n_actions):
+                denominator += np.exp(self.beta * self.action_values[act_i])
+            action_log_probability = self.beta * self.action_values[selected_action] - log(denominator)
+
+        else:   # in case of the 2 state space configurations
+            for act_i in xrange(self.n_actions):
+                denominator += np.exp(self.beta * self.action_values[self.current_state][act_i])
+            action_log_probability = self.beta * self.action_values[self.current_state][selected_action] - log(denominator)
+
+        self.update_likelihood(action_log_probability)
 
     def get_reward(self, raw_reward):
+        # updates the performance (accumulated payoffs) of the subject and
         # translates the raw reward signal (payoff) to the corresponding value of the adopted reward function
+
+        self.update_accumulated_payoffs(raw_reward)
 
         if self.reward_function == constants.IDENTITY:
             return raw_reward
@@ -78,18 +94,20 @@ class Agent:
         return (1 - np.exp(-raw_reward * constants.HTAN_FACTOR)) / (1 + np.exp(-raw_reward * constants.HTAN_FACTOR))
 
     def update_action_values(self, reward, action):
-        # updates the action values with the processed reward value
+        # updates the action values with the processed reward value according to the learning rule
+        # move to the next state
+
+        next_state = self.get_next_state(reward)
 
         if self.learning_rule == constants.Q_LEARNING:
-            next_state = self.get_next_state(reward)
-
-            # update rule
             td_error = reward + self.gamma * max(self.action_values[next_state]) - self.action_values[self.current_state][action]
             self.action_values[self.current_state][action] += self.alpha * td_error
 
         elif self.learning_rule == constants.AVG_TRACKING:
             pass
             # TODO implement average tracking
+
+        self.current_state = next_state
 
     def get_next_state(self, reward):
         # returns the next state depending on the state-space configuration of the model
@@ -105,3 +123,22 @@ class Agent:
         elif self.state_config == constants.LATEST_OUTCOME:
             # in the latest outcome configuration return state 0 when last payoff was profit, 1 otherwise
             return 0 if reward >= 0 else 1
+
+
+if __name__ == '__main__':
+
+    theta = (0.2, 10, 0.8)
+    a = Agent(theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
+
+    choices = [0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1]
+    rewards = [10, 20, 15, 12, 5, 6, 9, 5, 7, 12, 10, 12, 10, 11, 20, 12, 10, 11, 12, 20]
+
+    for trial_i in xrange(len(choices)):
+        action = choices[trial_i]
+        outcome = rewards[trial_i]
+
+        a.select_action(action)
+        a.update_action_values(outcome, action)
+
+    print a.likelihood
+
