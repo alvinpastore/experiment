@@ -4,7 +4,6 @@ from DataReader import DataReader
 path = '../../data/'
 file_name = 'BarronErev2003_Thaler_replication.txt'
 
-
 dr = DataReader(path + file_name)
 
 problem_data = dr.read_subject_data()
