@@ -101,7 +101,7 @@ class DataReader:
 
             subjects = {}
 
-            # rearranging prob_id lines into subjects
+            # populating subjects with trials
             for line in prob_lines[prob_id - 1]:
                 # val1_A = line[2]
                 # prob_A = line[3]
@@ -117,6 +117,7 @@ class DataReader:
                 outcome = float(line[13])
                 forgone = float(line[14])
 
+                # trial values from prob_lines
                 trial = Trial(trial_id, choice, outcome, forgone)
 
                 if subj_id not in subjects.keys():
@@ -124,6 +125,7 @@ class DataReader:
 
                 subjects[subj_id].add_trial(trial)
 
+            # adding the subjects to the problem
             self.problems[prob_id - 1] = subjects
 
         return self.problems
