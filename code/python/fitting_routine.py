@@ -1,4 +1,4 @@
-from model_fit import fit
+from model_fit_test import fit
 from DataReader import DataReader
 
 # load data into subjects objects
