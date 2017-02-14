@@ -4,6 +4,10 @@ from math import log
 import constants
 
 
+# class Agent encapsulates all the logic of a model
+# set up the Agent with parameters set and specifying the modelling modules
+# returns log_likelihood of the choices
+
 class Agent:
 
     def __init__(self, theta, state_config, learning_rule, reward_function):
@@ -12,7 +16,7 @@ class Agent:
             print 'Cannot combine Q-Learning with stateless configuration, exiting...'
             exit()
 
-        self.likelihood = 0
+        self.log_likelihood = 0
         self.state_config = state_config
         self.learning_rule = learning_rule
         self.reward_function = reward_function
@@ -44,7 +48,7 @@ class Agent:
 
     def update_likelihood(self, log_probability):
         # updates the likelihood of the model with the log_probability of an action
-        self.likelihood += log_probability
+        self.log_likelihood += log_probability
 
     def select_action(self, selected_action):
         # implements softmax action selection rule according to the state space configuration
@@ -112,7 +116,6 @@ class Agent:
 
     def get_next_state(self, reward):
         # returns the next state depending on the state-space configuration of the model
-        # TODO make state values constants, at the moment 0 for profit/gain and 1 for deficit/loss
 
         if self.state_config == constants.STATELESS:
             return constants.GAIN
@@ -145,7 +148,7 @@ if __name__ == '__main__':
         greedy_agent.select_action(action)
         greedy_agent.update_action_values(outcome, action)
 
-    print 'greedy_agent greedy_choices: ' + str(greedy_agent.likelihood)
+    print 'greedy_agent greedy_choices: ' + str(greedy_agent.log_likelihood)
 
     for trial_i in xrange(len(choices)):
         action = choices[trial_i]
@@ -154,7 +157,7 @@ if __name__ == '__main__':
         random_agent.select_action(action)
         random_agent.update_action_values(outcome, action)
 
-    print 'random_agent greedy_choices: ' + str(random_agent.likelihood)
+    print 'random_agent greedy_choices: ' + str(random_agent.log_likelihood)
 
     '''Random choices'''
     choices = [0,   1, 0,  1, 0, 0,  1, 0,  1,  0,  1, 0,  1,  1, 0,  1, 0,  1,  1, 0]
@@ -167,7 +170,7 @@ if __name__ == '__main__':
         greedy_agent.select_action(action)
         greedy_agent.update_action_values(outcome, action)
 
-    print 'greedy_agent random_choices: ' + str(greedy_agent.likelihood)
+    print 'greedy_agent random_choices: ' + str(greedy_agent.log_likelihood)
 
     for trial_i in xrange(len(choices)):
         action = choices[trial_i]
@@ -176,7 +179,7 @@ if __name__ == '__main__':
         random_agent.select_action(action)
         random_agent.update_action_values(outcome, action)
 
-    print 'random_agent random_choices: ' + str(random_agent.likelihood)
+    print 'random_agent random_choices: ' + str(random_agent.log_likelihood)
 
 
 
