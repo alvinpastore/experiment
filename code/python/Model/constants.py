@@ -3,6 +3,12 @@ STATELESS = 'stateless'
 FULL_HISTORY = 'full_history'
 LATEST_OUTCOME = 'latest_outcome'
 
+# state codes
+PROFIT = 0
+GAIN = 0
+DEFICIT = 1
+LOSS = 1
+
 # learning rules
 Q_LEARNING = 'q_learning'
 AVG_TRACKING = 'avg_tracking'
