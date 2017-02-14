@@ -131,3 +131,32 @@ class DataReader:
         return self.problems
 
 
+# example of usage
+if __name__ == "__main__":
+
+    # path and filename
+    path = '../../data/'
+    file_name = 'BarronErev2003_Thaler_replication.txt'
+
+    dr = DataReader(path + file_name)
+
+    # load data into dictionary {problem: subjects}
+    problem_data = dr.read_subject_data()
+
+    for problem_id, subjs in problem_data.iteritems():
+        print problem_id
+
+        # for each subject
+        for subj_id, subj in subjs.iteritems():
+            print subj_id
+
+            print subj.get_choices()
+
+            raw_input()
+
+            # get trials and print them
+            trials = subj.get_trials()
+            for trial in trials:
+                print trial
+        raw_input()
+
