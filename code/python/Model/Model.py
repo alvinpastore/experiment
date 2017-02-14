@@ -4,11 +4,11 @@ from math import log
 import constants
 
 
-# class Agent encapsulates all the logic of a model
-# set up the Agent with parameters set and specifying the modelling modules
+# class Model encapsulates all the logic of a model
+# set up the Model with parameters set and specifying the modelling modules
 # returns log_likelihood of the choices
 
-class Agent:
+class Model:
 
     def __init__(self, theta, state_config, learning_rule, reward_function):
 
@@ -43,7 +43,7 @@ class Agent:
         self.accumulated_payoffs += raw_reward
 
     def update_current_state(self, state):
-        # updates the current state of the agent
+        # updates the current state of the model
         self.current_state = state
 
     def update_likelihood(self, log_probability):
@@ -52,7 +52,7 @@ class Agent:
 
     def select_action(self, selected_action):
         # implements softmax action selection rule according to the state space configuration
-        # uses the resulting  action_log_probability to update the likelihood of the agent
+        # uses the resulting  action_log_probability to update the likelihood of the model
 
         denominator = 0
 
@@ -134,8 +134,8 @@ if __name__ == '__main__':
     greedy_theta = (0.4, 0.1, 0.9)
     random_theta = (0.4, 0.01, 0.9)
 
-    greedy_agent = Agent(greedy_theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
-    random_agent = Agent(random_theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
+    greedy_model = Model(greedy_theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
+    random_model = Model(random_theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
 
     '''Greedy choices'''
     choices = [0,   1,  1,  1, 0, 1,  1,  0, 0,  1,  0,  1,  1,  1,  1,  1,  1,  1,  1, 1]
@@ -145,19 +145,19 @@ if __name__ == '__main__':
         action = choices[trial_i]
         outcome = rewards[trial_i]
 
-        greedy_agent.select_action(action)
-        greedy_agent.update_action_values(outcome, action)
+        greedy_model.select_action(action)
+        greedy_model.update_action_values(outcome, action)
 
-    print 'greedy_agent greedy_choices: ' + str(greedy_agent.log_likelihood)
+    print 'greedy_model greedy_choices: ' + str(greedy_model.log_likelihood)
 
     for trial_i in xrange(len(choices)):
         action = choices[trial_i]
         outcome = rewards[trial_i]
 
-        random_agent.select_action(action)
-        random_agent.update_action_values(outcome, action)
+        random_model.select_action(action)
+        random_model.update_action_values(outcome, action)
 
-    print 'random_agent greedy_choices: ' + str(random_agent.log_likelihood)
+    print 'random_model greedy_choices: ' + str(random_model.log_likelihood)
 
     '''Random choices'''
     choices = [0,   1, 0,  1, 0, 0,  1, 0,  1,  0,  1, 0,  1,  1, 0,  1, 0,  1,  1, 0]
@@ -167,19 +167,19 @@ if __name__ == '__main__':
         action = choices[trial_i]
         outcome = rewards[trial_i]
 
-        greedy_agent.select_action(action)
-        greedy_agent.update_action_values(outcome, action)
+        greedy_model.select_action(action)
+        greedy_model.update_action_values(outcome, action)
 
-    print 'greedy_agent random_choices: ' + str(greedy_agent.log_likelihood)
+    print 'greedy_model random_choices: ' + str(greedy_model.log_likelihood)
 
     for trial_i in xrange(len(choices)):
         action = choices[trial_i]
         outcome = rewards[trial_i]
 
-        random_agent.select_action(action)
-        random_agent.update_action_values(outcome, action)
+        random_model.select_action(action)
+        random_model.update_action_values(outcome, action)
 
-    print 'random_agent random_choices: ' + str(random_agent.log_likelihood)
+    print 'random_model random_choices: ' + str(random_model.log_likelihood)
 
 
 
