@@ -2,7 +2,7 @@ class Trial:
 
     def __init__(self, trial_id, choice, outcome, forgone):
         self.id      = trial_id
-        self.choice  = choice
+        self.choice  = choice - 1 # choice (1,2) -> (0,1)
         self.outcome = outcome
         self.forgone = forgone
 
