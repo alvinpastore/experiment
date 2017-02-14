@@ -13,3 +13,9 @@ class Subject:
 
     def get_trials(self):
         return self.trials
+
+    def get_choices(self):
+        return [trial.choice for trial in self.trials]
+
+    def get_outcomes(self):
+        return [trial.outcome for trial in self.trials]
