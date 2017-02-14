@@ -144,15 +144,19 @@ if __name__ == "__main__":
     problem_data = dr.read_subject_data()
 
     for problem_id, subjs in problem_data.iteritems():
-        print problem_id
+        print 'problem: ', problem_id
 
         # for each subject
         for subj_id, subj in subjs.iteritems():
-            print subj_id
+            print 'subject: ', subj_id
 
-            print subj.get_choices()
+            transactions = zip(subj.get_choices(), subj.get_outcomes())
+            for trans_idx in xrange(len(transactions)):
+                print transactions[trans_idx][0]
+                print transactions[trans_idx][1]
+                print
 
-            raw_input()
+                raw_input()
 
             # get trials and print them
             trials = subj.get_trials()
