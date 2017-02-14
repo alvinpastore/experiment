@@ -93,20 +93,21 @@ class Agent:
     def htan(raw_reward):
         return (1 - np.exp(-raw_reward * constants.HTAN_FACTOR)) / (1 + np.exp(-raw_reward * constants.HTAN_FACTOR))
 
-    def update_action_values(self, reward, action):
+    def update_action_values(self, reward, current_action):
         # updates the action values with the processed reward value according to the learning rule
         # move to the next state
 
         next_state = self.get_next_state(reward)
 
         if self.learning_rule == constants.Q_LEARNING:
-            td_error = reward + self.gamma * max(self.action_values[next_state]) - self.action_values[self.current_state][action]
-            self.action_values[self.current_state][action] += self.alpha * td_error
+            td_error = reward + self.gamma * max(self.action_values[next_state]) - self.action_values[self.current_state][current_action]
+            self.action_values[self.current_state][current_action] += self.alpha * td_error
 
         elif self.learning_rule == constants.AVG_TRACKING:
-            pass
-            # TODO implement average tracking
-
+            if self.state_config == constants.STATELESS:
+                self.action_values[current_action] += self.alpha * (reward - self.action_values[current_action])
+            else:
+                self.action_values[self.current_state][current_action] += self.alpha * (reward - self.action_values[self.current_state][current_action])
         self.current_state = next_state
 
     def get_next_state(self, reward):
@@ -114,31 +115,68 @@ class Agent:
         # TODO make state values constants, at the moment 0 for profit/gain and 1 for deficit/loss
 
         if self.state_config == constants.STATELESS:
-            return 0
+            return constants.GAIN
 
         elif self.state_config == constants.FULL_HISTORY:
             # in the full history configuration return state 0 when in profit, 1 in loss
-            return 0 if self.accumulated_payoffs >= 0 else 1
+            return constants.PROFIT if self.accumulated_payoffs >= 0 else constants.DEFICIT
 
         elif self.state_config == constants.LATEST_OUTCOME:
             # in the latest outcome configuration return state 0 when last payoff was profit, 1 otherwise
-            return 0 if reward >= 0 else 1
+            return constants.GAIN if reward >= 0 else constants.LOSS
 
 
 if __name__ == '__main__':
 
-    theta = (0.2, 10, 0.8)
-    a = Agent(theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
+    greedy_theta = (0.4, 0.1, 0.9)
+    random_theta = (0.4, 0.01, 0.9)
 
-    choices = [0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1]
-    rewards = [10, 20, 15, 12, 5, 6, 9, 5, 7, 12, 10, 12, 10, 11, 20, 12, 10, 11, 12, 20]
+    greedy_agent = Agent(greedy_theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
+    random_agent = Agent(random_theta, state_config='latest_outcome', learning_rule='q_learning', reward_function='identity')
+
+    '''Greedy choices'''
+    choices = [0,   1,  1,  1, 0, 1,  1,  0, 0,  1,  0,  1,  1,  1,  1,  1,  1,  1,  1, 1]
+    rewards = [10, 20, 15, 12, 5, 12, 10, 5, 7, 12,  6, 12, 10, 11, 20, 12, 10, 11, 12, 20]
 
     for trial_i in xrange(len(choices)):
         action = choices[trial_i]
         outcome = rewards[trial_i]
 
-        a.select_action(action)
-        a.update_action_values(outcome, action)
+        greedy_agent.select_action(action)
+        greedy_agent.update_action_values(outcome, action)
 
-    print a.likelihood
+    print 'greedy_agent greedy_choices: ' + str(greedy_agent.likelihood)
+
+    for trial_i in xrange(len(choices)):
+        action = choices[trial_i]
+        outcome = rewards[trial_i]
+
+        random_agent.select_action(action)
+        random_agent.update_action_values(outcome, action)
+
+    print 'random_agent greedy_choices: ' + str(random_agent.likelihood)
+
+    '''Random choices'''
+    choices = [0,   1, 0,  1, 0, 0,  1, 0,  1,  0,  1, 0,  1,  1, 0,  1, 0,  1,  1, 0]
+    rewards = [10, 20, 7, 12, 5, 6, 12, 5, 11, 10, 10, 7, 12, 13, 6, 12, 9, 11, 12, 6]
+
+    for trial_i in xrange(len(choices)):
+        action = choices[trial_i]
+        outcome = rewards[trial_i]
+
+        greedy_agent.select_action(action)
+        greedy_agent.update_action_values(outcome, action)
+
+    print 'greedy_agent random_choices: ' + str(greedy_agent.likelihood)
+
+    for trial_i in xrange(len(choices)):
+        action = choices[trial_i]
+        outcome = rewards[trial_i]
+
+        random_agent.select_action(action)
+        random_agent.update_action_values(outcome, action)
+
+    print 'random_agent random_choices: ' + str(random_agent.likelihood)
+
+
 
