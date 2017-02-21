@@ -27,3 +27,7 @@ TANH_OMEGA = 1/500  # TODO decide this value depending on the outcome data sprea
 
 # tanh new range
 TANH_NEW_RANGE = 50  # TODO decide this value depending on the outcome data spread
+
+# file paths
+DATA_FILE_PATH = '../../data/'
+RESULTS_FILE_PATH = '../../results/'
