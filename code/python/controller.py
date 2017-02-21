@@ -83,14 +83,14 @@ if __name__ == '__main__':
     reward_functions = (constants.IDENTITY, constants.TANH, constants.PT_VALUE_FUNC)
     model_configurations = get_modules_permutations(state_spaces, learning_rules, reward_functions)
 
-    bounds = ((0.0001, 0.5), (0.00001, 0.5), (0.01, 1))
+    bounds = ((0.0001, 1), (0.00001, 1), (0.001, 1))
     # alphas = (0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7)
     # betas =  ( 0.01,  0.03,  0.1,  0.3,   1,   3,  10, 30)
     # gammas = (0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7)
 
-    alphas = (0.0001, 0.001, 0.1, 0.3)
-    betas = (0.00001, 0.001, 0.1)
-    gammas = (0.01, 0.3)
+    alphas = (0.0001,  0.001, 0.1, 0.3)
+    betas  = (0.00001, 0.001, 0.1)
+    gammas = (0.001,    0.01, 0.3)
 
     guesspoints_permutations = get_guesspoints_permutations(alphas, betas, gammas)
 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     data_reader = DataReader(data_file_path + file_name)
     problem_data = data_reader.read_subject_data()
 
-    # TODO create data structure to hold results
+    # create data structure to hold results
     results = {}
 
     # save for each player the log_lik of each configuration best param set
@@ -149,7 +149,7 @@ if __name__ == '__main__':
                     if minimisation_results['fun'] < results[problem_id][subj_id][configuration][1]:
                         results[problem_id][subj_id][configuration] = (minimisation_results['x'], minimisation_results['fun'])
 
-                print '{} - {} - {}: {}'.format(MLE, configuration, params, time.time()-t_config)
+                print '{5:.2f} s -> MLE:{0:.2f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.format(MLE, configuration, params[0], params[1], params[2], time.time()-t_config)
 
             if MLE >= MLE_INIT:
                 print 'no solution for subject'
