@@ -6,11 +6,19 @@ close all;
 hist_bins_A = 100;
 hist_bins_B = 50;
 LW = 2;
+FS = 20;
 num_subjects = 12;
 choice_A = 1;
 choice_B = 2;
 choice_col = 4;
 payoff_col = 5;
+
+% colors
+red = [215,25,28]/255;
+orange = [253,174,97]/255;
+green = [171,221,164]/255;
+blue = [43,131,186]/255;
+black = [0.5,0.5,0.5];
 
 %% data gathering
 data = csvread('../../data/BarronErev2003_Thaler_replication.csv');
@@ -44,6 +52,8 @@ y_tanh = new_range * (1 - exp(- x .* 1/omega)) ./ (1 + exp(- x .* 1/omega));
 %% Population-wide statistics
 if pop_stats
     % print statistics and histogram figures
+    
+    % Problem 1
     fprintf('problem 1 option A, min: %f, max: %f, mean: %f, std: %f \n',... 
     min(payoffs_p1A),max(payoffs_p1A),mean(payoffs_p1A),std(payoffs_p1A));
     fprintf('problem 1 option B, min: %f, max: %f, mean: %f, std: %f \n',... 
@@ -59,14 +69,16 @@ if pop_stats
     ax = gca;
     ax.YColor = 'Black'; 
     %plot(x,x,'r-','LineWidth',LW); identity is too wide in the y axis
-    plot(x,yPT+new_range,'b-','LineWidth',LW);
-    plot(x,y_tanh+new_range,'g-','LineWidth',LW);
+    plot(x,yPT+new_range,'Color',blue,'LineStyle','-','LineWidth',LW);
+    plot(x,y_tanh+new_range,'Color',green,'LineStyle','-','LineWidth',LW);
     ylabel('Reward functions output')
     xlim([-800 800])
     xticks([-750 -500 -250 0 250 500 750]);
     %xlim([min(payoffs_p1A) max(payoffs_p1A)]);
+    set(gca,'FontSize',FS);
     hold off;
 
+    % Problem 2
     fprintf('problem 2 option A, min: %f, max: %f, mean: %f, std: %f \n',... 
     min(payoffs_p2A),max(payoffs_p2A),mean(payoffs_p2A),std(payoffs_p2A));
     fprintf('problem 2 option B, min: %f, max: %f, mean: %f, std: %f \n',... 
@@ -82,13 +94,15 @@ if pop_stats
     ax = gca;
     ax.YColor = 'Black'; 
     %plot(x,x,'r-','LineWidth',LW); identity is too wide in the y axis
-    plot(x,yPT+new_range,'b-','LineWidth',LW);
-    plot(x,y_tanh+new_range,'g-','LineWidth',LW);
+    plot(x,yPT+new_range,'Color',blue,'LineStyle','-','LineWidth',LW);
+    plot(x,y_tanh+new_range,'Color',green,'LineStyle','-','LineWidth',LW);
     ylabel('Reward functions output')
     xlim([400 2000]);
     xticks([600 1000 1400 1800]);
+    set(gca,'FontSize',FS);
     hold off;
 
+    % Problem 3
     fprintf('problem 3 option A, min: %f, max: %f, mean: %f, std: %f \n',... 
     min(payoffs_p3A),max(payoffs_p3A),mean(payoffs_p3A),std(payoffs_p3A));
     fprintf('problem 3 option B, min: %f, max: %f, mean: %f, std: %f \n',... 
@@ -104,12 +118,13 @@ if pop_stats
     ax = gca;
     ax.YColor = 'Black'; 
     %plot(x,x,'r-','LineWidth',LW); identity is too wide in the y axis
-    plot(x,yPT+new_range,'b-','LineWidth',LW);
-    plot(x,y_tanh+new_range,'g-','LineWidth',LW);
+    plot(x,yPT+new_range,'Color',blue,'LineStyle','-','LineWidth',LW);
+    plot(x,y_tanh+new_range,'Color',green,'LineStyle','-','LineWidth',LW);
     xlim([1150 1350]);
     ylabel('Reward functions output')
     %yticks([-200 -100 0 100 200])
     xticks([1200 1250 1300])
+    set(gca,'FontSize',FS);
     hold off;
 end
 
