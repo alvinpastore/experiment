@@ -28,6 +28,6 @@ TANH_OMEGA = 1/500  # TODO decide this value depending on the outcome data sprea
 # tanh new range
 TANH_NEW_RANGE = 50  # TODO decide this value depending on the outcome data spread
 
-# file paths
+# file paths    # TODO make these absolute and not relative (won't work when calling from different folders)
 DATA_FILE_PATH = '../../data/'
 RESULTS_FILE_PATH = '../../results/'
