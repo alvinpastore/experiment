@@ -73,8 +73,9 @@ if __name__ == '__main__':
     MLE_INIT = 9999
 
     # path and filename
-    file_path = '../../data/'
+    data_file_path = '../../data/'
     file_name = 'BarronErev2003_Thaler_replication.txt'
+    results_file_path = '../../results/'
     results_filename = 'test_results.txt'
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
@@ -94,7 +95,7 @@ if __name__ == '__main__':
     guesspoints_permutations = get_guesspoints_permutations(alphas, betas, gammas)
 
     # load data into dictionary {problem: subjects}
-    data_reader = DataReader(file_path + file_name)
+    data_reader = DataReader(data_file_path + file_name)
     problem_data = data_reader.read_subject_data()
 
     # TODO create data structure to hold results
@@ -154,6 +155,6 @@ if __name__ == '__main__':
                 print 'no solution for subject'
             print 'time elapsed for subject {}: {}'.format(subj_id, time.time() - t_subj)
 
-    save_results(file_path, results_filename, results)
+    save_results(results_file_path, results_filename, results)
 
     print 'total time {}'.format(time.time() - t_total)
