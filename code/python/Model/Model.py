@@ -37,6 +37,8 @@ class Model:
         self.beta = theta[1]
         if self.learning_rule == constants.Q_LEARNING:
             self.gamma = theta[2]
+        else:
+            self.gamma = 0
 
     def update_accumulated_payoffs(self, raw_reward):
         # updates the accumulated payoffs representing the performance of the subject in the task
