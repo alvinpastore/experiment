@@ -1,13 +1,13 @@
 from __future__ import division
+
+import itertools
+import time
+
+from scipy.optimize import minimize
+
 from Model import Model
 from Model import constants
 from DataReader import DataReader
-import itertools
-import os
-from scipy.optimize import minimize
-import numpy as np
-from math import log
-import time
 
 
 def model_fit(*args):
