@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     # path and filename
 
-    file_name = 'BarronErev2003_Thaler_replication.txt'
+    file_name = 'BarronErev2003_Thaler_replication.csv'
     results_filename = 'test_results.txt'
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     guesspoints_permutations = get_guesspoints_permutations(alphas, betas, gammas)
 
     # load data into dictionary {problem: subjects}
-    data_reader = DataReader(constants.DATA_FILE_PATH + file_name)
+    data_reader = DataReader.DataReader(constants.DATA_FILE_PATH + file_name)
     problem_data = data_reader.read_subject_data()
 
     # create data structure to hold results
