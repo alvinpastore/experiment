@@ -77,8 +77,8 @@ class Model:
         if self.reward_function == constants.IDENTITY:
             return raw_reward
 
-        elif self.reward_function == constants.HTAN:
-            return self.htan(raw_reward)
+        elif self.reward_function == constants.TANH:
+            return self.tanh(raw_reward)
 
         elif self.reward_function == constants.PT_VALUE_FUNC:
             return self.pt_value_function(raw_reward)
@@ -94,8 +94,9 @@ class Model:
             return raw_reward
 
     @staticmethod
-    def htan(raw_reward):
-        return (1 - np.exp(-raw_reward * constants.HTAN_FACTOR)) / (1 + np.exp(-raw_reward * constants.HTAN_FACTOR))
+    def tanh(raw_reward):
+        return constants.TANH_NEW_RANGE * (1 - np.exp(-raw_reward * constants.TANH_OMEGA)) \
+               / (1 + np.exp(-raw_reward * constants.TANH_OMEGA))
 
     def update_action_values(self, reward, current_action):
         # updates the action values with the processed reward value according to the learning rule

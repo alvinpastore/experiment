@@ -15,12 +15,15 @@ AVG_TRACKING = 'avg_tracking'
 
 # reward functions
 IDENTITY = 'identity'
-HTAN = 'htan'
+TANH = 'tanh'
 PT_VALUE_FUNC = 'pt_value_func'
 
 # prospect theory value function factor and loss aversion
 PT_FACTOR = 0.88
 PT_LOSS_AVERSION = 2.25
 
-# htan factor
-HTAN_FACTOR = 15 #TODO decide this value depending on the outcome data spread
+# tanh squash factor
+TANH_OMEGA = 1/500  # TODO decide this value depending on the outcome data spread
+
+# tanh new range
+TANH_NEW_RANGE = 50  # TODO decide this value depending on the outcome data spread
