@@ -23,8 +23,8 @@ def model_fit(*args):
         outcome = transactions[trial_i][1]
 
         model.select_action(action)
-
-        model.update_action_values(outcome, action)
+        reward = model.get_reward(outcome)
+        model.update_action_values(reward, action)
 
     if VERBOSE:
         print 'log likelihood ' + str(model.log_likelihood)
