@@ -66,7 +66,7 @@ class DataReader:
                     # stdd_B = line[9]
                     subj_id = int(line[10])
                     trial_id = int(line[11])
-                    choice = int(line[12])
+                    choice = int(line[12]) - 1  # choice (1,2) -> (0,1)
                     outcome = float(line[13])
                     forgone = float(line[14])
 
@@ -122,7 +122,7 @@ class DataReader:
                     # stdd_B = line[9]
                     subj_id = int(line[1])
                     trial_id = int(line[2])
-                    choice = int(line[3])
+                    choice = int(line[3]) - 1  # choice (1,2) -> (0,1)
                     outcome = float(line[4])
                     forgone = None
 
