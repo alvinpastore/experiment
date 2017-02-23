@@ -23,7 +23,7 @@ PT_FACTOR = 0.88
 PT_LOSS_AVERSION = 2.25
 
 # tanh squash factor
-TANH_OMEGA = 1/500  # TODO decide this value depending on the outcome data spread
+TANH_OMEGA = 500  # TODO decide this value depending on the outcome data spread
 
 # tanh new range
 TANH_NEW_RANGE = 50  # TODO decide this value depending on the outcome data spread

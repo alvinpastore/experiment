@@ -97,8 +97,8 @@ class Model:
 
     @staticmethod
     def tanh(raw_reward):
-        return constants.TANH_NEW_RANGE * (1 - np.exp(-raw_reward * constants.TANH_OMEGA)) \
-               / (1 + np.exp(-raw_reward * constants.TANH_OMEGA))
+        return constants.TANH_NEW_RANGE * (1 - np.exp(-raw_reward * 1/constants.TANH_OMEGA)) \
+               / (1 + np.exp(-raw_reward * 1/constants.TANH_OMEGA))
 
     def update_action_values(self, reward, current_action):
         # updates the action values with the processed reward value according to the learning rule
