@@ -46,9 +46,9 @@ class DataReader:
                 if int(problem_id) == self.thaler_problem_id3:
                     prob_lines[2].append(line)
 
-            print "thaler problem 1 " + str(prob_lines[0].__len__()) + "lines"
-            print "thaler problem 2 " + str(prob_lines[1].__len__()) + "lines"
-            print "thaler problem 3 " + str(prob_lines[2].__len__()) + "lines"
+            print "thaler problem 1 " + str(prob_lines[0].__len__()) + " lines"
+            print "thaler problem 2 " + str(prob_lines[1].__len__()) + " lines"
+            print "thaler problem 3 " + str(prob_lines[2].__len__()) + " lines"
 
             for prob_id in [1, 2, 3]:
 
@@ -102,9 +102,9 @@ class DataReader:
                 if int(problem_id) == self.thaler_problem_id3:
                     prob_lines[2].append(line)
 
-            print "thaler problem 1 " + str(prob_lines[0].__len__()) + "lines"
-            print "thaler problem 2 " + str(prob_lines[1].__len__()) + "lines"
-            print "thaler problem 3 " + str(prob_lines[2].__len__()) + "lines"
+            print "thaler problem 1 " + str(prob_lines[0].__len__()) + " lines"
+            print "thaler problem 2 " + str(prob_lines[1].__len__()) + " lines"
+            print "thaler problem 3 " + str(prob_lines[2].__len__()) + " lines"
 
             for prob_id in [1, 2, 3]:
 

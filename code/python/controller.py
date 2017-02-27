@@ -58,13 +58,13 @@ def save_results(file_path, results_filename, results):
                     print 'params ', resl[0]
                     print 'MLE ', resl[1]
                     print
-                    results_file.write(str(config[0]) + ',')   # state-space
-                    results_file.write(str(config[1]) + ',')   # learning rule
-                    results_file.write(str(config[2]) + ',')   # reward function
+                    results_file.write(str(resl[1]) + ',')     # MLE
                     results_file.write(str(resl[0][0]) + ',')  # alpha
                     results_file.write(str(resl[0][1]) + ',')  # beta
                     results_file.write(str(resl[0][2]) + ',')  # gamma
-                    results_file.write(str(resl[1]) + '\n')    # MLE
+                    results_file.write(str(config[0]) + ',')   # state-space
+                    results_file.write(str(config[1]) + ',')   # learning rule
+                    results_file.write(str(config[2]) + '\n')  # reward function
 
 
 if __name__ == '__main__':
