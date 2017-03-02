@@ -39,9 +39,9 @@ payoffs_p3B = data_problem_3(data_problem_3(:,4) == choice_B, payoff_col);
 %% reward funcs
 x = -2000:0.1:2000;
 
-alpha = 0.6;
-beta = 0.6;
-lambda = 2;
+alpha = 0.88;
+beta = 0.88;
+lambda = 2.25;
 yPT = (x.*(x>=0)).^alpha + (-lambda).*((-(x.*(x<0))).^beta);
 
 omega =500;
