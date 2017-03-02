@@ -76,7 +76,9 @@ if __name__ == '__main__':
     # path and filename
 
     file_name = 'BarronErev2003_Thaler_replication.csv'
-    results_filename = 'results_' + file_name + '__' + str(datetime.datetime.now()) + '.txt'
+    file_name = 'test_greedy_random_generic.csv'
+    results_filename = 'results_' + file_name + '__' + str(datetime.datetime.now()) + '.csv'
+    print 'Results file: {}'.format(results_filename)
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
     learning_rules = (constants.Q_LEARNING, constants.AVG_TRACKING)
