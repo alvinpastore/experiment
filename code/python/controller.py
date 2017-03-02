@@ -2,6 +2,7 @@ from __future__ import division
 
 import itertools
 import time
+import datetime
 
 from scipy.optimize import minimize
 
@@ -33,7 +34,7 @@ def model_fit(*args):
     return -model.log_likelihood
 
 
-def get_modules_permutations(state_sp, learn_rules, rew_funcs):
+def get_config_permutations(state_sp, learn_rules, rew_funcs):
     mod_perms = list(itertools.product(state_sp, learn_rules, rew_funcs))
     # make sure qlearning is not combined with stateless
     mod_perms = [perm for perm in mod_perms if constants.STATELESS not in perm or constants.Q_LEARNING not in perm]
@@ -49,15 +50,15 @@ def save_results(file_path, results_filename, results):
     with open(file_path + results_filename, 'w') as results_file:
         for problem_id, problem in results.iteritems():
             print 'problem ', problem_id
-            results_file.write('problem ' + str(problem_id) + '\n')
             for subj_id, subj in problem.iteritems():
                 print 'subject ', subj_id
-                results_file.write('subject ' + str(subj_id) + '\n')
                 for config, resl in subj.iteritems():
                     print 'config ', config
                     print 'params ', resl[0]
                     print 'MLE ', resl[1]
                     print
+                    results_file.write(str(problem_id) + ',') # Problem ID
+                    results_file.write(str(subj_id) + ',')    # Subject ID
                     results_file.write(str(resl[1]) + ',')     # MLE
                     results_file.write(str(resl[0][0]) + ',')  # alpha
                     results_file.write(str(resl[0][1]) + ',')  # beta
@@ -71,25 +72,25 @@ if __name__ == '__main__':
     t_total = time.time()
     VERBOSE = 0
     MLE_INIT = 9999
-
+    TOLERANCE = 1e-4  # 0.0001
     # path and filename
 
     file_name = 'BarronErev2003_Thaler_replication.csv'
-    results_filename = 'test_results.txt'
+    results_filename = 'results_' + file_name + '__' + str(datetime.datetime.now()) + '.txt'
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
     learning_rules = (constants.Q_LEARNING, constants.AVG_TRACKING)
     reward_functions = (constants.IDENTITY, constants.TANH, constants.PT_VALUE_FUNC)
-    model_configurations = get_modules_permutations(state_spaces, learning_rules, reward_functions)
+    model_configurations = get_config_permutations(state_spaces, learning_rules, reward_functions)
 
     bounds = ((0.0001, 1), (0.00001, 1), (0.001, 1))
     # alphas = (0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7)
     # betas =  ( 0.01,  0.03,  0.1,  0.3,   1,   3,  10, 30)
     # gammas = (0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7)
 
-    alphas = (0.0001,  0.001, 0.1, 0.3)
-    betas  = (0.00001, 0.001, 0.1)
-    gammas = (0.001,    0.01, 0.3)
+    alphas = [0.0001,  0.001, 0.1, 0.3]
+    betas  = [0.00001, 0.001, 0.1]
+    gammas = [0.001,    0.01, 0.3]
 
     guesspoints_permutations = get_guesspoints_permutations(alphas, betas, gammas)
 
@@ -113,6 +114,7 @@ if __name__ == '__main__':
 
         # iterate over subjects (fetch subject data)
         for subj_id, subject in subjects.iteritems():
+
             t_subj = time.time()
             print 'subject ', subj_id
 
@@ -135,25 +137,31 @@ if __name__ == '__main__':
                     # minimise the fitting function
                     minimisation_results = minimize(model_fit, guesspoints,
                                                     args=(transactions, configuration), bounds=bounds,
-                                                    method='TNC', tol=1e-06)
+                                                    method='TNC', options={'ftol': TOLERANCE, 'xtol': TOLERANCE})
+
+                    # TODO if MLE < prev_MLE store in results_dict (overwrite)
+                    # TODO bug is that after finding the best, the following are not MLEs of the config/theta
+                    # but still the best replicated many times
 
                     # if successful and MLE lower than current estimate,
                     # store log_lik (MLE), params and MODEL config
-                    if minimisation_results['success'] and minimisation_results['fun'] < MLE:
-                        MLE = minimisation_results['fun']
-                        params = list(minimisation_results['x'])
-                        config = configuration
-
                     # store the results of the configuration if the LL is better than the previous one
-                    if minimisation_results['fun'] < results[problem_id][subj_id][configuration][1]:
+                    if minimisation_results['success'] \
+                            and minimisation_results['fun'] < results[problem_id][subj_id][configuration][1]:
+
                         results[problem_id][subj_id][configuration] = (minimisation_results['x'], minimisation_results['fun'])
 
-                print '{5:.2f} s -> MLE:{0:.2f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.format(MLE, configuration, params[0], params[1], params[2], time.time()-t_config)
+                print '{5:.2f} s -> MLE:{0:.2f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.\
+                    format(results[problem_id][subj_id][configuration][1], configuration,
+                           results[problem_id][subj_id][configuration][0][0],
+                           results[problem_id][subj_id][configuration][0][1],
+                           results[problem_id][subj_id][configuration][0][2],
+                           time.time()-t_config)
+                print
 
-            if MLE >= MLE_INIT:
-                print 'no solution for subject'
             print 'time elapsed for subject {}: {}'.format(subj_id, time.time() - t_subj)
 
     save_results(constants.RESULTS_FILE_PATH, results_filename, results)
 
     print 'total time {}'.format(time.time() - t_total)
+    print 'completed ' + str(datetime.datetime.now())
