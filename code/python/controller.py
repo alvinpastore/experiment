@@ -77,7 +77,8 @@ if __name__ == '__main__':
 
     file_name = 'BarronErev2003_Thaler_replication.csv'
     file_name = 'test_greedy_random_generic.csv'
-    results_filename = 'results_' + file_name + '__' + str(datetime.datetime.now()) + '.csv'
+    results_filename = 'results_' + file_name[:-4] + '__' + str(datetime.datetime.now()) + '.csv'
+    results_filename = results_filename.split()[0]  # split and take first to remove timestamp (after space)
     print 'Results file: {}'.format(results_filename)
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
