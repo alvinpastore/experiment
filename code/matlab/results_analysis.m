@@ -1,16 +1,11 @@
 clear;
 close all;
 
-%% PLOT CONSTANTS
-FS = 20;
-LW = 2;
-BAR_OFFSET = 10;
-% colors
-red = [215,25,28]/255;
-orange = [253,174,97]/255;
-green = [171,221,164]/255;
-blue = [43,131,186]/255;
-black = [0.5,0.5,0.5];
+% CONSTANTS for subroutines
+SAVE_SINGLE_BEST_MODELS = 0;
+SAVE_BEST_MODELS_SUBSET = 0;
+PLOT_FIGURE = 0;
+
 
 %% LOAD DATA
 file_path = '../../results/';
@@ -50,65 +45,46 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
     prob_results_all_probs = results(results(:,1) == prob_idx,:);
     
     for subj_idx = 1:SUBJS_NUMBER % subjects ids start from 1
-        TITLE = ['Subject ',num2str(subj_idx)];
+        
+        
+        % get the subject results
         subj_res = prob_results_all_probs(prob_results_all_probs(:,2) == subj_idx,:);
         
         [aic,bic] = aicbic(-subj_res(:,3), DEG_OF_FREEDOM, N_TRIALS);
-           
-        fh = figure();
         
-        subplot(1,2,1);
-        bar(1:length(DEG_OF_FREEDOM),aic,'FaceColor',blue);
-        hold on
-        bar(length(DEG_OF_FREEDOM)+1,r_AIC,'FaceColor',red);
-        plot([0 length(DEG_OF_FREEDOM)+2],[r_AIC-10,r_AIC-10],'Color',red,'LineStyle','--','LineWidth',LW)
-        ylabel('AIC');
-        xlabel('Models');
-        title(TITLE);
-        axis([0 length(DEG_OF_FREEDOM)+2 min(min(aic),min(bic))-BAR_OFFSET 295]);
-        xticks([]);
-        set(gca,'FontSize',FS);
+        if PLOT_FIGURE
+            plot_model_results(subj_idx,DEG_OF_FREEDOM,aic,bic,r_AIC,r_BIC);
+        end
         
-        subplot(1,2,2);
-        bar(1:length(DEG_OF_FREEDOM),bic,'FaceColor',blue);
-        hold on
-        bar(length(DEG_OF_FREEDOM)+1,r_BIC,'FaceColor',red);
-        plot([0 length(DEG_OF_FREEDOM)+2],[r_BIC-10,r_BIC-10],'Color',red,'LineStyle','--','LineWidth',LW)
-        ylabel('BIC');
-        xlabel('Models');
-        title(TITLE);
-        axis([0 length(DEG_OF_FREEDOM)+2 min(min(aic),min(bic))-BAR_OFFSET 295]);
-        xticks([]);
-        set(gca,'FontSize',FS);
-        hold off
-        
+        %% SINGLE BEST MODEL 
         % find best model based on MLE
         [best_model_MLE, best_model_line] = min(subj_res(:,3));
 
         % get the results and config for the best model
         subj_best_model_res = subj_res(best_model_line,:);
         subj_best_model_config = configurations(best_model_line,:);
-
-        % store in cell array
+        
+        % store in cell array single best model
         res_idx = (prob_idx * SUBJS_NUMBER) + subj_idx;
         res_values = num2cell(subj_best_model_res);
         best_models(res_idx,:) = {res_values{:}, subj_best_model_config{:}};
         
+        % save single best models
+        if SAVE_SINGLE_BEST_MODELS
+            save_single_best_models(file_path,file_name,best_models);
+        end
+        
+        %% SUBSET OF BEST MODELS
+        % sort the models according to lowest aic first
+        [~,aic_idx] = sortrows(aic);
+        sorted_results = subj_res(aic_idx,:);
+        sorted_configs = configurations(aic_idx,:);
+        
+        
     end
 end
 
-SAVE = 0
 
-if SAVE
-    %% SAVE BEST MODELS RESULTS TO CSV FILE
-    fileID = fopen([file_path, 'BEST_MODELS_', file_name],'w');
-    format_spec = '%f,%f,%f,%f,%f,%f,%s,%s,%s\n';
-    [nrows,ncols] = size(best_models);
-    for row = 1:nrows
-        fprintf(fileID,format_spec,best_models{row,:});
-    end
 
-    fclose(fileID);
-end
 
 clearvars -except best_models
