@@ -57,8 +57,8 @@ def save_results(file_path, results_filename, results):
                     print 'params ', resl[0]
                     print 'MLE ', resl[1]
                     print
-                    results_file.write(str(problem_id) + ',') # Problem ID
-                    results_file.write(str(subj_id) + ',')    # Subject ID
+                    results_file.write(str(problem_id) + ',')  # Problem ID
+                    results_file.write(str(subj_id) + ',')     # Subject ID
                     results_file.write(str(resl[1]) + ',')     # MLE
                     results_file.write(str(resl[0][0]) + ',')  # alpha
                     results_file.write(str(resl[0][1]) + ',')  # beta
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     # path and filename
 
     file_name = 'BarronErev2003_Thaler_replication.csv'
-    file_name = 'test_greedy_random_generic.csv'
+    # file_name = 'test_greedy_random_generic.csv'
     results_filename = 'results_' + file_name[:-4] + '__' + str(datetime.datetime.now()) + '.csv'
     results_filename = results_filename.split()[0]  # split and take first to remove timestamp (after space)
     print 'Results file: {}'.format(results_filename)
@@ -87,9 +87,9 @@ if __name__ == '__main__':
     model_configurations = get_config_permutations(state_spaces, learning_rules, reward_functions)
 
     bounds = ((0.0001, 1), (0.00001, 1), (0.001, 1))
-    # alphas = (0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7)
-    # betas =  ( 0.01,  0.03,  0.1,  0.3,   1,   3,  10, 30)
-    # gammas = (0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7)
+    # alphas = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7]
+    # betas =  [ 0.01,  0.03,  0.1,  0.3,   1,   3,  10, 30]
+    # gammas = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7]
 
     alphas = [0.0001,  0.001, 0.1, 0.3]
     betas  = [0.00001, 0.001, 0.1]
