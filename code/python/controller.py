@@ -77,8 +77,9 @@ if __name__ == '__main__':
 
     file_name = 'BarronErev2003_Thaler_replication.csv'
     # file_name = 'test_greedy_random_generic.csv'
-    results_filename = 'results_' + file_name[:-4] + '__' + str(datetime.datetime.now()) + '.csv'
+    results_filename = 'results_' + file_name[:-4] + '__' + str(datetime.datetime.now())
     results_filename = results_filename.split()[0]  # split and take first to remove timestamp (after space)
+    results_filename += '.csv'
     print 'Results file: {}'.format(results_filename)
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
@@ -86,14 +87,14 @@ if __name__ == '__main__':
     reward_functions = (constants.IDENTITY, constants.TANH, constants.PT_VALUE_FUNC)
     model_configurations = get_config_permutations(state_spaces, learning_rules, reward_functions)
 
-    bounds = ((0.0001, 1), (0.00001, 1), (0.001, 1))
-    # alphas = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7]
-    # betas =  [ 0.01,  0.03,  0.1,  0.3,   1,   3,  10, 30]
-    # gammas = [0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 0.5, 0.7]
+    bounds = ((0.00001, 1), (0.00001, 1), (0.00001, 1))
+    alphas = [0.0001,  0.001,  0.01, 0.03, 0.1, 0.5, 0.7]
+    betas =  [0.0001,  0.001,  0.01, 0.03, 0.1, 0.5, 0.7]
+    gammas = [0.0001,  0.001,  0.01, 0.03, 0.1, 0.3, 0.7]
 
-    alphas = [0.0001,  0.001, 0.1, 0.3]
-    betas  = [0.00001, 0.001, 0.1]
-    gammas = [0.001,    0.01, 0.3]
+    # alphas = [0.0001,  0.001, 0.1, 0.3]
+    # betas  = [0.00001, 0.001, 0.1]
+    # gammas = [0.001,    0.01, 0.3]
 
     guesspoints_permutations = get_guesspoints_permutations(alphas, betas, gammas)
 
