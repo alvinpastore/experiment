@@ -1,4 +1,4 @@
-function save_best_models_subset(file_path,file_name,best_multiple_models)
+function save_subset_best_models(file_path,file_name,best_multiple_models)
 %SAVE_SINGLE_BEST_MODELS 
 %saves to csv file the single best model for each problem/subject
 

@@ -3,9 +3,11 @@ close all;
 
 % CONSTANTS for subroutines
 SAVE_SINGLE_BEST_MODELS = 0;
-SAVE_BEST_MODELS_SUBSET = 0;
+SAVE_SUBSET_BEST_MODELS = 1;
 PLOT_FIGURE = 0;
 
+% threshold criterion for model selection
+AIC_DIFF_THRESHOLD = 6;
 
 %% LOAD DATA
 file_path = '../../results/';
@@ -39,6 +41,10 @@ r_BIC = - 2 * random_model_MLE + (log(N_TRIALS) * 0);
 % data structure to store the single best models (according to lowest MLE)
 best_models = cell(SUBJS_NUMBER * PROBS_NUMBER,9);
 
+% data structure to store the best models subset (according to ?AIC < 6)
+best_multiple_models = cell(1);
+multiple_model_idx = 1;
+
 for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
     
     % get subset of results for prob_id
@@ -69,22 +75,30 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
         res_values = num2cell(subj_best_model_res);
         best_models(res_idx,:) = {res_values{:}, subj_best_model_config{:}};
         
-        % save single best models
-        if SAVE_SINGLE_BEST_MODELS
-            save_single_best_models(file_path,file_name,best_models);
-        end
+        
         
         %% SUBSET OF BEST MODELS
         % sort the models according to lowest aic first
-        [~,aic_idx] = sortrows(aic);
+        [sorted_aic,aic_idx] = sortrows(aic);
         sorted_results = subj_res(aic_idx,:);
         sorted_configs = configurations(aic_idx,:);
         
-        
+        best_aics = sorted_aic-min(sorted_aic) < AIC_DIFF_THRESHOLD;
+        disp(['Prob: ',num2str(prob_idx),' subj: ', num2str(subj_idx),' models: ',num2str(sum(best_aics))]);
+        best_multiple_models{multiple_model_idx} = {sorted_results(best_aics,:),sorted_configs(best_aics,:)};
+        multiple_model_idx = multiple_model_idx + 1;
     end
 end
 
+% save single best models
+if SAVE_SINGLE_BEST_MODELS
+    save_single_best_models(file_path,file_name,best_models);
+end
+
+% save single best models
+if SAVE_SUBSET_BEST_MODELS
+    save_subset_best_models(file_path,file_name,best_multiple_models);
+end
 
 
-
-clearvars -except best_models
+clearvars -except best_models best_multiple_models
