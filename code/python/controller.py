@@ -127,7 +127,6 @@ if __name__ == '__main__':
             transactions = zip(subject.get_choices(), subject.get_outcomes())
 
             MLE = MLE_INIT
-            params = []
 
             # iterate over model combinations and guess points
             for configuration in model_configurations:
@@ -143,17 +142,17 @@ if __name__ == '__main__':
                                                     args=(transactions, configuration), bounds=bounds,
                                                     method='TNC', options={'ftol': TOLERANCE, 'xtol': TOLERANCE})
 
-                    # TODO if MLE < prev_MLE store in results_dict (overwrite)
-                    # TODO bug is that after finding the best, the following are not MLEs of the config/theta
-                    # but still the best replicated many times
-
                     # if successful and MLE lower than current estimate,
                     # store log_lik (MLE), params and MODEL config
                     # store the results of the configuration if the LL is better than the previous one
                     if minimisation_results['success'] \
                             and minimisation_results['fun'] < results[problem_id][subj_id][configuration][1]:
 
-                        results[problem_id][subj_id][configuration] = (minimisation_results['x'], minimisation_results['fun'])
+                        alpha = minimisation_results['x'][0]
+                        beta = minimisation_results['x'][1]
+                        gamma = minimisation_results['x'][2] if constants.Q_LEARNING in configuration[1] else 0
+                        params = [alpha, beta, gamma]
+                        results[problem_id][subj_id][configuration] = (params, minimisation_results['fun'])
 
                 print '{5:.2f} s -> MLE:{0:.2f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.\
                     format(results[problem_id][subj_id][configuration][1], configuration,
