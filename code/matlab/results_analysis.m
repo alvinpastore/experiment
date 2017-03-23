@@ -2,19 +2,22 @@ clear;
 close all;
 
 % CONSTANTS for subroutines
-SAVE_SINGLE_BEST_MODELS = 0;
+SAVE_SINGLE_BEST_MODELS = 1;
 SAVE_SUBSET_BEST_MODELS = 1;
-PLOT_FIGURE = 0;
+% Subset generation method 1 -> delta_AIC; 2 -> AIC weights
+SUBSET_METHOD = 2; 
+PLOT_FIGURES = 0;
 
-% threshold criterion for model selection
-AIC_DIFF_THRESHOLD = 6;
+% threshold criteria for model selection
+AIC_DIFF_THRESHOLD = 2; %Burnham Anderson 2002 page 131
+WEIGHT_THRESHOLD = 0.95; % "For a 95% confidence set on the actual K-L best model"  Burnham Anderson 2002 page 169
 
 %% LOAD DATA
 file_path = '../../results/';
 %file_name = 'results_test_greedy_random_generic__2017-03-02.csv'; %TEST
-file_name = 'results_BarronErev2003_Thaler_replication.csv__2017-02-28.csv';
+file_name = 'results_BarronErev2003_Thaler_replication__2017-03-20.csv';
 fid = fopen([file_path,file_name]);
-format_spec = '%f %f %f %f %f %f %s %s %s';
+format_spec = '%f %f %f %f %f %f %s %s %s %*[^\n]';
 results_data = textscan(fid, format_spec, 'delimiter', ',');
 fclose(fid);
 
@@ -26,7 +29,6 @@ configurations = horzcat(results_data{7:end});
 %% Find and store best model for each player
 
 SUBJECT_LINES_NUMBER = 15; % each subject has 15 lines
-% subjs number = num of subj in each problem x number of problems
 PROBS_NUMBER = size(unique(results(:,1)),1);
 SUBJS_NUMBER = size(unique(results(:,2)),1);
 N_TRIALS = 200; % the number of interactions
@@ -38,10 +40,11 @@ random_model_MLE = N_TRIALS * log(1/2);
 r_AIC = - 2 * random_model_MLE + (2 * 0); 
 r_BIC = - 2 * random_model_MLE + (log(N_TRIALS) * 0);
 
-% data structure to store the single best models (according to lowest MLE)
-best_models = cell(SUBJS_NUMBER * PROBS_NUMBER,9);
+% data structure to store the single best models (according to weighted average)
+best_models = zeros(SUBJS_NUMBER * PROBS_NUMBER,5);
 
-% data structure to store the best models subset (according to ?AIC < 6)
+% data structure to store the best models subset 
+% according to eitherd delta_AIC or sum of Ak. weights
 best_multiple_models = cell(1);
 multiple_model_idx = 1;
 
@@ -58,47 +61,64 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
         
         [aic,bic] = aicbic(-subj_res(:,3), DEG_OF_FREEDOM, N_TRIALS);
         
-        if PLOT_FIGURE
+        if PLOT_FIGURES
             plot_model_results(subj_idx,DEG_OF_FREEDOM,aic,bic,r_AIC,r_BIC);
         end
-        
-        %% SINGLE BEST MODEL 
-        % find best model based on MLE
-        [best_model_MLE, best_model_line] = min(subj_res(:,3));
-
-        % get the results and config for the best model
-        subj_best_model_res = subj_res(best_model_line,:);
-        subj_best_model_config = configurations(best_model_line,:);
-        
-        % store in cell array single best model
-        res_idx = (prob_idx * SUBJS_NUMBER) + subj_idx;
-        res_values = num2cell(subj_best_model_res);
-        best_models(res_idx,:) = {res_values{:}, subj_best_model_config{:}};
-        
-        
-        
-        %% SUBSET OF BEST MODELS
-        % sort the models according to lowest aic first
+                
+        %% find the subset of best models 
+        % sort the models according to lowest aic
         [sorted_aic,aic_idx] = sortrows(aic);
         sorted_results = subj_res(aic_idx,:);
         sorted_configs = configurations(aic_idx,:);
         
-        best_aics = sorted_aic-min(sorted_aic) < AIC_DIFF_THRESHOLD;
+        % calculate AIC differences (deltas)
+        AICd = sorted_aic-min(sorted_aic);
+
+        if SUBSET_METHOD == 1 % delta_AIC method
+
+            % logical array: 1 for first AIC differences values (below threshold), 0 for the rest
+            best_aics = AICd < AIC_DIFF_THRESHOLD;
+
+        elseif SUBSET_METHOD == 2 % Akaike weights method
+
+            % calculate Akaike weights
+            AICw = exp(-.5.*AICd) ./ sum(exp(-.5.*AICd));
+
+            % get subset of weights that adds up to 95%
+            for weight_idx = 1:length(AICw)
+                if sum(AICw(1:weight_idx)) > WEIGHT_THRESHOLD
+                    % logical array: 1 for first weight_idx values, 0 for the rest
+                    best_aics = AICw >= AICw(weight_idx);
+                    break
+                end
+            end
+
+            %% Estimate single best model as a weighted average of the
+            % subset (normalised on sum of weights cumulatively > 0.95)
+            weighted_average_params = sum(sorted_results(best_aics,4:6).*AICw(best_aics))/sum(AICw(best_aics));
+            
+            % store value in result structure's correct position 
+            res_idx = (prob_idx * SUBJS_NUMBER) + subj_idx;
+            best_models(res_idx,:) = [prob_idx, subj_idx, weighted_average_params];
+        end
+
+        %% Save the subset of best models 
+        % [prob_id subj_id MLE alpha beta gamma AIC weight config]
         disp(['Prob: ',num2str(prob_idx),' subj: ', num2str(subj_idx),' models: ',num2str(sum(best_aics))]);
-        best_multiple_models{multiple_model_idx} = {sorted_results(best_aics,:),sorted_configs(best_aics,:)};
+        best_multiple_models{multiple_model_idx} = {sorted_results(best_aics,:),sorted_configs(best_aics,:),sorted_aic(best_aics,:),AICw(best_aics,:)};
         multiple_model_idx = multiple_model_idx + 1;
+
     end
 end
 
-% save single best models
-if SAVE_SINGLE_BEST_MODELS
-    save_single_best_models(file_path,file_name,best_models);
+% Store single models only if weighted avg was used 
+if SAVE_SINGLE_BEST_MODELS  && SUBSET_METHOD == 2
+    save_weighted_avg_models(file_path,file_name,best_models);
 end
 
-% save single best models
+% Store subset of best models
 if SAVE_SUBSET_BEST_MODELS
-    save_subset_best_models(file_path,file_name,best_multiple_models);
+    save_subset_best_models(file_path,file_name,best_multiple_models,SUBSET_METHOD);
 end
-
 
 clearvars -except best_models best_multiple_models
