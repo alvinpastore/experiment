@@ -123,4 +123,4 @@ end
 
 clearvars -except best_models best_multiple_models
 states_analysis(best_multiple_models);
-correlation_analysis(best_models);
+correlations_analysis(best_models);
