@@ -2,8 +2,8 @@ clear;
 close all;
 
 % CONSTANTS for subroutines
-SAVE_SINGLE_BEST_MODELS = 1;
-SAVE_SUBSET_BEST_MODELS = 1;
+SAVE_SINGLE_BEST_MODELS = 0;
+SAVE_SUBSET_BEST_MODELS = 0;
 % Subset generation method 1 -> delta_AIC; 2 -> AIC weights
 SUBSET_METHOD = 2; 
 PLOT_FIGURES = 0;
@@ -122,3 +122,5 @@ if SAVE_SUBSET_BEST_MODELS
 end
 
 clearvars -except best_models best_multiple_models
+states_analysis(best_multiple_models);
+correlation_analysis(best_models);
