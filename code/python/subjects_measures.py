@@ -9,7 +9,8 @@ from DataReader import DataReader
 '''
 Calculates and stores in a csv file two measures on the subjects interactions:
 - performance: sum of the outcomes
-- payoff_variability: standard deviation of the outcomes
+- pv (payoff variability): standard deviation of the outcomes
+- pmax (proportion of maximising choices) = percentage of choices of option H (higher expected return)
 '''
 
 if __name__ == '__main__':
@@ -30,11 +31,17 @@ if __name__ == '__main__':
             # iterate over subjects (fetch subject data)
             for subj_id, subject in subjects.iteritems():
 
-                print 'sub {} - performance {} -  pv {} '.\
-                    format(subj_id, sum(subject.get_outcomes()), np.std(subject.get_outcomes()))
-                measures_file.write(str(problem_id) + ',')                       # Problem ID
-                measures_file.write(str(subj_id) + ',')                          # Subject ID
-                measures_file.write(str(sum(subject.get_outcomes())) + ',')      # Performance
-                measures_file.write(str(np.std(subject.get_outcomes())) + '\n')  # PV
+                performance = sum(subject.get_outcomes())
+                pv = np.std(subject.get_outcomes())
+                pmax = 1 - (sum(subject.get_choices()) / 200.0)  # choice 0 is maximising option, choice 1 low return
+
+                print 'sub {} - performance {} -  pv {} - pmax {}'.\
+                    format(subj_id, performance, pv, pmax)
+
+                measures_file.write(str(problem_id) + ',')   # Problem ID
+                measures_file.write(str(subj_id) + ',')      # Subject ID
+                measures_file.write(str(performance) + ',')  # Performance
+                measures_file.write(str(pv) + ',')           # PV
+                measures_file.write(str(pmax) + '\n')        # Pmax
 
             print
