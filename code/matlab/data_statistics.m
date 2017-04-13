@@ -1,15 +1,15 @@
 pop_stats = 1;
-subj_stats = 0;
+subj_stats = 1;
 
 close all;
 %% static variables
-hist_bins_A = 100;
-hist_bins_B = 50;
+hist_bins_HI = 100;
+hist_bins_LO = 50;
 LW = 2;
 FS = 20;
 num_subjects = 12;
-choice_A = 1;
-choice_B = 2;
+choice_HI = 1;
+choice_LO = 2;
 choice_col = 4;
 payoff_col = 5;
 
@@ -29,12 +29,12 @@ data_problem_2 = data(data(:,1)==2,:);
 data_problem_3 = data(data(:,1)==3,:);
 
 % payoff data separation into choices
-payoffs_p1A = data_problem_1(data_problem_1(:,4) == choice_A, payoff_col);
-payoffs_p1B = data_problem_1(data_problem_1(:,4) == choice_B, payoff_col);
-payoffs_p2A = data_problem_2(data_problem_2(:,4) == choice_A, payoff_col);
-payoffs_p2B = data_problem_2(data_problem_2(:,4) == choice_B, payoff_col);
-payoffs_p3A = data_problem_3(data_problem_3(:,4) == choice_A, payoff_col);
-payoffs_p3B = data_problem_3(data_problem_3(:,4) == choice_B, payoff_col);
+payoffs_p1HI = data_problem_1(data_problem_1(:,4) == choice_HI, payoff_col);
+payoffs_p1LO = data_problem_1(data_problem_1(:,4) == choice_LO, payoff_col);
+payoffs_p2HI = data_problem_2(data_problem_2(:,4) == choice_HI, payoff_col);
+payoffs_p2LO = data_problem_2(data_problem_2(:,4) == choice_LO, payoff_col);
+payoffs_p3HI = data_problem_3(data_problem_3(:,4) == choice_HI, payoff_col);
+payoffs_p3LO = data_problem_3(data_problem_3(:,4) == choice_LO, payoff_col);
 
 %% reward funcs
 x = -2000:0.1:2000;
@@ -54,14 +54,14 @@ if pop_stats
     % print statistics and histogram figures
     
     % Problem 1
-    fprintf('problem 1 option A, min: %f, max: %f, mean: %f, std: %f \n',... 
-    min(payoffs_p1A),max(payoffs_p1A),mean(payoffs_p1A),std(payoffs_p1A));
-    fprintf('problem 1 option B, min: %f, max: %f, mean: %f, std: %f \n',... 
-    min(payoffs_p1B),max(payoffs_p1B),mean(payoffs_p1B),std(payoffs_p1B));
+    fprintf('problem 1 option Hi, min: %f, max: %f, mean: %f, std: %f \n',... 
+    min(payoffs_p1HI),max(payoffs_p1HI),mean(payoffs_p1HI),std(payoffs_p1HI));
+    fprintf('problem 1 option Lo, min: %f, max: %f, mean: %f, std: %f \n',... 
+    min(payoffs_p1LO),max(payoffs_p1LO),mean(payoffs_p1LO),std(payoffs_p1LO));
     figure();
-    h1 = histogram(payoffs_p1A,hist_bins_A,'EdgeColor','none');
+    h1 = histogram(payoffs_p1HI,hist_bins_HI,'EdgeColor','none');
     hold on;
-    h2 = histogram(payoffs_p1B,hist_bins_B,'EdgeColor','none');
+    h2 = histogram(payoffs_p1LO,hist_bins_LO,'EdgeColor','none');
     ylabel('Outcomes frequency')
     title('Problem 1');
     xlabel('Original outcome');
@@ -79,14 +79,14 @@ if pop_stats
     hold off;
 
     % Problem 2
-    fprintf('problem 2 option A, min: %f, max: %f, mean: %f, std: %f \n',... 
-    min(payoffs_p2A),max(payoffs_p2A),mean(payoffs_p2A),std(payoffs_p2A));
-    fprintf('problem 2 option B, min: %f, max: %f, mean: %f, std: %f \n',... 
-    min(payoffs_p2B),max(payoffs_p2B),mean(payoffs_p2B),std(payoffs_p2B));
+    fprintf('problem 2 option Hi, min: %f, max: %f, mean: %f, std: %f \n',... 
+    min(payoffs_p2HI),max(payoffs_p2HI),mean(payoffs_p2HI),std(payoffs_p2HI));
+    fprintf('problem 2 option Lo, min: %f, max: %f, mean: %f, std: %f \n',... 
+    min(payoffs_p2LO),max(payoffs_p2LO),mean(payoffs_p2LO),std(payoffs_p2LO));
     figure();
-    histogram(payoffs_p2A,hist_bins_A,'EdgeColor','none');
+    histogram(payoffs_p2HI,hist_bins_HI,'EdgeColor','none');
     hold on;
-    histogram(payoffs_p2B,hist_bins_B,'EdgeColor','none');
+    histogram(payoffs_p2LO,hist_bins_LO,'EdgeColor','none');
     ylabel('Outcomes frequency')
     title('Problem 2');
     xlabel('Original outcome');
@@ -103,14 +103,14 @@ if pop_stats
     hold off;
 
     % Problem 3
-    fprintf('problem 3 option A, min: %f, max: %f, mean: %f, std: %f \n',... 
-    min(payoffs_p3A),max(payoffs_p3A),mean(payoffs_p3A),std(payoffs_p3A));
-    fprintf('problem 3 option B, min: %f, max: %f, mean: %f, std: %f \n',... 
-    min(payoffs_p3B),max(payoffs_p3B),mean(payoffs_p3B),std(payoffs_p3B));
+    fprintf('problem 3 option Hi, min: %f, max: %f, mean: %f, std: %f \n',... 
+    min(payoffs_p3HI),max(payoffs_p3HI),mean(payoffs_p3HI),std(payoffs_p3HI));
+    fprintf('problem 3 option Lo, min: %f, max: %f, mean: %f, std: %f \n',... 
+    min(payoffs_p3LO),max(payoffs_p3LO),mean(payoffs_p3LO),std(payoffs_p3LO));
     figure();
-    histogram(payoffs_p3A,hist_bins_A,'EdgeColor','none');
+    histogram(payoffs_p3HI,hist_bins_HI,'EdgeColor','none');
     hold on;
-    histogram(payoffs_p3B,hist_bins_B,'EdgeColor','none');
+    histogram(payoffs_p3LO,hist_bins_LO,'EdgeColor','none');
     ylabel('Outcomes frequency')
     title('Problem 3');
     xlabel('Original outcome');
@@ -126,22 +126,107 @@ if pop_stats
     xticks([1200 1250 1300])
     set(gca,'FontSize',FS);
     hold off;
+    
+    %% subplots 
+    % underlying distributions
+    figure()
+    x = [-1000:.01:1000];
+    y = [0:.01:1000];
+    lo = normpdf(y,25,17.7);
+    hi = normpdf(x,100,354);
+    subplot(1,3,1);
+    hold on
+    title('Condition 1');
+    plot(y,lo,'LineWidth',LINEWIDTH)
+    plot(x,hi,'LineWidth',LINEWIDTH)
+    line([0 0], get(gca, 'ylim'),'Color','k','LineWidth',LINEWIDTH-1);
+    set(gca,'FontSize',FONTSIZE);
+    ylabel('PDF');
+    axis([-400 800 0 0.025])
+    hold off
+
+    x = [100:1:2000];
+    lo = normpdf(x,1225,17.7);
+    hi = normpdf(x,1300,354);
+    subplot(1,3,2);
+    hold on
+    title('Condition 2');
+    plot(x,lo,'LineWidth',LINEWIDTH)
+    plot(x,hi,'LineWidth',LINEWIDTH)
+    set(gca,'FontSize',FONTSIZE);
+    axis([800 2000 0 0.025])
+    legend({'Option Low','Option High'})
+    xlabel('Payoff value')
+    hold off
+
+    lo = normpdf(x,1225,17.7);
+    hi = normpdf(x,1300,17.7);
+    subplot(1,3,3);
+    hold on
+    title('Condition 3');
+    plot(x,lo,'LineWidth',LINEWIDTH)
+    plot(x,hi,'LineWidth',LINEWIDTH)
+    set(gca,'FontSize',FONTSIZE);
+    axis([1100 1500 0 0.025])
+    hold off
+
+    % observed distributions
+    figure(); % <- remove to overlap the two
+    subplot(1,3,1);
+    hold on
+    title('Condition 1');
+    h2 = histogram(payoffs_p1LO,hist_bins_LO,'EdgeColor','none');
+    h1 = histogram(payoffs_p1HI,hist_bins_HI,'EdgeColor','none');
+    line([0 0], get(gca, 'ylim'),'Color','k','LineWidth',LINEWIDTH-2);
+    set(gca,'FontSize',FONTSIZE);
+    ylabel('Frequency');
+    xlim([-400 800])
+    hold off
+
+    x = [100:1:2000];
+    subplot(1,3,2);
+    hold on
+    title('Condition 2');
+    histogram(payoffs_p2LO,hist_bins_LO,'EdgeColor','none');
+    histogram(payoffs_p2HI,hist_bins_HI,'EdgeColor','none');
+    set(gca,'FontSize',FONTSIZE);
+    xlim([800 2000])
+    legend({'Option High','Option Low'})
+    xlabel('Payoff value')
+    hold off
+
+    subplot(1,3,3);
+    hold on
+    title('Condition 3');
+    histogram(payoffs_p3LO,hist_bins_LO,'EdgeColor','none');
+    histogram(payoffs_p3HI,hist_bins_HI,'EdgeColor','none');
+    set(gca,'FontSize',FONTSIZE);
+    xlim([1100 1500])
+    hold off
+    
 end
 
 %% Subjects statistics
 if subj_stats
     figure();
+    FW = 20;
     subplot(1,3,1);
     hold on;
     % data problem 1
     for subj_id = 1:num_subjects
         subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
-        pmax_part1 = sum(subj_data(1:100,choice_col)==choice_A)/100;
-        pmax_part2 = sum(subj_data(101:200,choice_col)==choice_A)/100;
-        fprintf('p1, subj: %d  pmax 1: %f  pmax 2: %f\n',subj_id,pmax_part1,pmax_part2);
-        plot([1 2],[pmax_part1 pmax_part2],'LineWidth',LW);
-        axis([0.75,2.25,0,1]);
+        pmax_part1 = sum(subj_data(1:50,choice_col)==choice_HI)/50;
+        pmax_part2 = sum(subj_data(51:100,choice_col)==choice_HI)/50;
+        pmax_part3 = sum(subj_data(101:150,choice_col)==choice_HI)/50;
+        pmax_part4 = sum(subj_data(151:200,choice_col)==choice_HI)/50;
+        fprintf('p1, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,pmax_part1,pmax_part2,pmax_part3,pmax_part4);
+        plot([1 2 3 4],[pmax_part1 pmax_part2 pmax_part3 pmax_part4],'LineWidth',LW);
+        axis([0.75,4.25,0,1]);
         title('Problem 1')
+        set(gca,'FontSize',FW)
+        ylabel('PMax')
+        xticks([1,2,3,4])
+        xticklabels({'50','100','150','200'})
     end
     hold off;
 
@@ -151,12 +236,18 @@ if subj_stats
     % data problem 2
     for subj_id = 1:num_subjects
         subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
-        pmax_part1 = sum(subj_data(1:100,choice_col)==choice_A)/100;
-        pmax_part2 = sum(subj_data(101:200,choice_col)==choice_A)/100;
-        fprintf('p2, subj: %d  pmax 1: %f  pmax 2: %f\n',subj_id,pmax_part1,pmax_part2);
-        plot([1 2],[pmax_part1 pmax_part2],'LineWidth',LW);
-        axis([0.75,2.25,0,1]);
+        pmax_part1 = sum(subj_data(1:50,choice_col)==choice_HI)/50;
+        pmax_part2 = sum(subj_data(51:100,choice_col)==choice_HI)/50;
+        pmax_part3 = sum(subj_data(101:150,choice_col)==choice_HI)/50;
+        pmax_part4 = sum(subj_data(151:200,choice_col)==choice_HI)/50;
+        fprintf('p2, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,pmax_part1,pmax_part2,pmax_part3,pmax_part4);
+        plot([1 2 3 4],[pmax_part1 pmax_part2 pmax_part3 pmax_part4],'LineWidth',LW);
+        axis([0.75,4.25,0,1]);
         title('Problem 2')
+        set(gca,'FontSize',FW)
+        xlabel('Interactions')
+        xticks([1,2,3,4])
+        xticklabels({'50','100','150','200'})
     end
     hold off;
 
@@ -166,12 +257,18 @@ if subj_stats
     % data problem 3
     for subj_id = 1:num_subjects
         subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
-        pmax_part1 = sum(subj_data(1:100,choice_col)==choice_A)/100;
-        pmax_part2 = sum(subj_data(101:200,choice_col)==choice_A)/100;
-        fprintf('p3, subj: %d  pmax 1: %f  pmax 2: %f\n',subj_id,pmax_part1,pmax_part2);
-        plot([1 2],[pmax_part1 pmax_part2],'LineWidth',LW);
-        axis([0.75,2.25,0,1]);
+        pmax_part1 = sum(subj_data(1:50,choice_col)==choice_HI)/50;
+        pmax_part2 = sum(subj_data(51:100,choice_col)==choice_HI)/50;
+        pmax_part3 = sum(subj_data(101:150,choice_col)==choice_HI)/50;
+        pmax_part4 = sum(subj_data(151:200,choice_col)==choice_HI)/50;
+        fprintf('p3, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,pmax_part1,pmax_part2,pmax_part3,pmax_part4);
+        plot([1 2 3 4],[pmax_part1 pmax_part2 pmax_part3 pmax_part4],'LineWidth',LW);
+        axis([0.75,4.25,0,1]);
         title('Problem 3')
+        set(gca,'FontSize',FW)
+        xticks([1,2,3,4])
+        xticklabels({'50','100','150','200'})
+
     end
     hold off;
 end
