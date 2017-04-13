@@ -191,7 +191,7 @@ if pop_stats
     histogram(payoffs_p2HI,hist_bins_HI,'EdgeColor','none');
     set(gca,'FontSize',FONTSIZE);
     xlim([800 2000])
-    legend({'Option High','Option Low'})
+    legend({'Option Low','Option High'})
     xlabel('Payoff value')
     hold off
 
