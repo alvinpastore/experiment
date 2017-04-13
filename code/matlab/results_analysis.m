@@ -4,12 +4,15 @@ close all;
 % CONSTANTS for subroutines
 SAVE_SINGLE_BEST_MODELS = 0;
 SAVE_SUBSET_BEST_MODELS = 0;
-% Subset generation method 1 -> delta_AIC; 2 -> AIC weights
-SUBSET_METHOD = 2; 
 PLOT_FIGURES = 0;
 
+% Subset generation method 
+% 1 -> delta_AIC; 2 -> AIC weights 
+SUBSET_METHOD = 2;
+
 % threshold criteria for model selection
-AIC_DIFF_THRESHOLD = 2; %Burnham Anderson 2002 page 131
+AIC_DIFF_THRESHOLD = 2;  % Burnham Anderson 2002 page 131
+RND_THRESHOLD = 2;       % 10 is very strong evidence. 2 is bare minum!
 WEIGHT_THRESHOLD = 0.95; % "For a 95% confidence set on the actual K-L best model"  Burnham Anderson 2002 page 169
 
 %% LOAD DATA
@@ -61,53 +64,59 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
         
         [aic,bic] = aicbic(-subj_res(:,3), DEG_OF_FREEDOM, N_TRIALS);
         
-        if PLOT_FIGURES
-            plot_model_results(subj_idx,DEG_OF_FREEDOM,aic,bic,r_AIC,r_BIC);
-        end
-                
-        %% find the subset of best models 
-        % sort the models according to lowest aic
-        [sorted_aic,aic_idx] = sortrows(aic);
-        sorted_results = subj_res(aic_idx,:);
-        sorted_configs = configurations(aic_idx,:);
+        % skip the analysis for players with no model significantly better than random
+        if min(aic) < (r_AIC - RND_THRESHOLD)
         
-        % calculate AIC differences (deltas)
-        AICd = sorted_aic-min(sorted_aic);
+            %% find the subset of best models 
+            % sort the models according to lowest aic
+            [sorted_aic,aic_idx] = sortrows(aic);
+            sorted_results = subj_res(aic_idx,:);
+            sorted_configs = configurations(aic_idx,:);
 
-        if SUBSET_METHOD == 1 % delta_AIC method
+            % calculate AIC differences (deltas)
+            AICd = sorted_aic-min(sorted_aic);
 
-            % logical array: 1 for first AIC differences values (below threshold), 0 for the rest
-            best_aics = AICd < AIC_DIFF_THRESHOLD;
+            if SUBSET_METHOD == 1 % delta_AIC method
 
-        elseif SUBSET_METHOD == 2 % Akaike weights method
+                % logical array: 1 for first AIC differences values (below threshold), 0 for the rest
+                best_aics = AICd < AIC_DIFF_THRESHOLD;
 
-            % calculate Akaike weights
-            AICw = exp(-.5.*AICd) ./ sum(exp(-.5.*AICd));
+            elseif SUBSET_METHOD == 2 % Akaike weights method
 
-            % get subset of weights that adds up to 95%
-            for weight_idx = 1:length(AICw)
-                if sum(AICw(1:weight_idx)) > WEIGHT_THRESHOLD
-                    % logical array: 1 for first weight_idx values, 0 for the rest
-                    best_aics = AICw >= AICw(weight_idx);
-                    break
+                % calculate Akaike weights
+                AICw = exp(-.5.*AICd) ./ sum(exp(-.5.*AICd));
+
+                % get subset of weights that adds up to 95%
+                for weight_idx = 1:length(AICw)
+                    if sum(AICw(1:weight_idx)) > WEIGHT_THRESHOLD
+                        % logical array: 1 for first weight_idx values, 0 for the rest
+                        best_aics = AICw >= AICw(weight_idx);
+                        break
+                    end
                 end
+
+                %% Estimate single best model as a weighted average of the
+                % subset (normalised on sum of weights cumulatively > 0.95)
+                weighted_average_params = sum(sorted_results(best_aics,4:6).*AICw(best_aics))/sum(AICw(best_aics));
+
+                % store value in result structure's correct position 
+                res_idx = (prob_idx * SUBJS_NUMBER) + subj_idx;
+                best_models(res_idx,:) = [prob_idx, subj_idx, weighted_average_params];
+                
+                if PLOT_FIGURES
+                    plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,RND_THRESHOLD,best_aics);
+                end
+                
             end
 
-            %% Estimate single best model as a weighted average of the
-            % subset (normalised on sum of weights cumulatively > 0.95)
-            weighted_average_params = sum(sorted_results(best_aics,4:6).*AICw(best_aics))/sum(AICw(best_aics));
-            
-            % store value in result structure's correct position 
-            res_idx = (prob_idx * SUBJS_NUMBER) + subj_idx;
-            best_models(res_idx,:) = [prob_idx, subj_idx, weighted_average_params];
+            %% Save the subset of best models 
+            % [prob_id subj_id MLE alpha beta gamma AIC weight config]
+            disp(['Prob: ',num2str(prob_idx),' subj: ', num2str(subj_idx),' models: ',num2str(sum(best_aics))]);
+            best_multiple_models{multiple_model_idx} = {sorted_results(best_aics,:),sorted_configs(best_aics,:),sorted_aic(best_aics,:),AICw(best_aics,:)};
+            multiple_model_idx = multiple_model_idx + 1;
+        else
+            disp('No model better than random');
         end
-
-        %% Save the subset of best models 
-        % [prob_id subj_id MLE alpha beta gamma AIC weight config]
-        disp(['Prob: ',num2str(prob_idx),' subj: ', num2str(subj_idx),' models: ',num2str(sum(best_aics))]);
-        best_multiple_models{multiple_model_idx} = {sorted_results(best_aics,:),sorted_configs(best_aics,:),sorted_aic(best_aics,:),AICw(best_aics,:)};
-        multiple_model_idx = multiple_model_idx + 1;
-
     end
 end
 
