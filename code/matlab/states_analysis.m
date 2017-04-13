@@ -114,6 +114,6 @@ function states_analysis(best_multiple_models)
     disp(['Subset count: ',num2str(sum(observed_counts))]);
     disp(['Chi-squared value = ',num2str(chi2stat)]);
     disp(['p-val = ',num2str(p)]);
-    
+end
     
     

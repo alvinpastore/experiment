@@ -12,3 +12,4 @@ function save_weighted_avg_models(file_path,file_name,best_models)
     end
 
     fclose(fileID);
+end
