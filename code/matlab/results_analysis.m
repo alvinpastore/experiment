@@ -6,7 +6,7 @@ SAVE_SINGLE_BEST_MODELS = 0;
 SAVE_SUBSET_BEST_MODELS = 0;
 PLOT_FIGURES = 0;
 STATES_ANALYSIS = 0;
-REWARD_FUNCTIONS_ANALYSIS = 1;
+REWARD_FUNCTIONS_ANALYSIS = 0;
 CORRELATION_ANALYSIS = 0;
 
 % Subset generation method 
@@ -15,7 +15,7 @@ SUBSET_METHOD = 2;
 
 % threshold criteria for model selection
 AIC_DIFF_THRESHOLD = 2;  % Burnham Anderson 2002 page 131
-RND_THRESHOLD = 10;       % 10 is very strong evidence. 2 is bare minum!
+RND_THRESHOLD = 2;       % 10 is very strong evidence. 2 is bare minum!
 WEIGHT_THRESHOLD = 0.95; % "For a 95% confidence set on the actual K-L best model"  Burnham Anderson 2002 page 169
 
 %% LOAD DATA
