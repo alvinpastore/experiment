@@ -5,6 +5,9 @@ close all;
 SAVE_SINGLE_BEST_MODELS = 0;
 SAVE_SUBSET_BEST_MODELS = 0;
 PLOT_FIGURES = 0;
+STATES_ANALYSIS = 0;
+REWARD_FUNCTIONS_ANALYSIS = 1;
+CORRELATION_ANALYSIS = 0;
 
 % Subset generation method 
 % 1 -> delta_AIC; 2 -> AIC weights 
@@ -12,7 +15,7 @@ SUBSET_METHOD = 2;
 
 % threshold criteria for model selection
 AIC_DIFF_THRESHOLD = 2;  % Burnham Anderson 2002 page 131
-RND_THRESHOLD = 2;       % 10 is very strong evidence. 2 is bare minum!
+RND_THRESHOLD = 10;       % 10 is very strong evidence. 2 is bare minum!
 WEIGHT_THRESHOLD = 0.95; % "For a 95% confidence set on the actual K-L best model"  Burnham Anderson 2002 page 169
 
 %% LOAD DATA
@@ -115,7 +118,7 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
             best_multiple_models{multiple_model_idx} = {sorted_results(best_aics,:),sorted_configs(best_aics,:),sorted_aic(best_aics,:),AICw(best_aics,:)};
             multiple_model_idx = multiple_model_idx + 1;
         else
-            disp('No model better than random');
+            disp(['Subj: ',num2str(subj_idx),': no model better than random']);
         end
     end
 end
@@ -130,6 +133,19 @@ if SAVE_SUBSET_BEST_MODELS
     save_subset_best_models(file_path,file_name,best_multiple_models,SUBSET_METHOD);
 end
 
+if STATES_ANALYSIS
+    states_analysis(best_multiple_models);
+end
+
+if REWARD_FUNCTIONS_ANALYSIS
+    reward_functions_analysis(best_multiple_models);
+end
+
+if CORRELATION_ANALYSIS
+    correlations_analysis(best_models);
+end
+
+%Matrix_2 = Matrix_1( [1:2,4:8,10:end] , : ) method to remove a row from a
+%matrix (in case it is necessary to remove models, maybe outliers) 
+ 
 clearvars -except best_models best_multiple_models
-states_analysis(best_multiple_models);
-correlations_analysis(best_models);
