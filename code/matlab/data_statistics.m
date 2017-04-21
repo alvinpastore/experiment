@@ -1,24 +1,45 @@
-pop_stats = 1;
+pop_stats = 0;
 subj_stats = 1;
 
 close all;
 %% static variables
 hist_bins_HI = 100;
 hist_bins_LO = 50;
-LW = 2;
-FS = 20;
+LW = 4;
+FS = 25;
 num_subjects = 12;
 choice_HI = 1;
 choice_LO = 2;
 choice_col = 4;
 payoff_col = 5;
+block_1 = 1:50;
+block_2 = 51:100;
+block_3 = 101:150;
+block_4 = 151:200;
 
 % colors
-red = [215,25,28]/255;
-orange = [253,174,97]/255;
-green = [171,221,164]/255;
-blue = [43,131,186]/255;
-black = [0.5,0.5,0.5];
+% red = [215,25,28]/255;
+% orange = [253,174,97]/255;
+% green = [171,221,164]/255;
+% blue = [43,131,186]/255;
+% black = [0.5,0.5,0.5];
+red = [235, 49, 20]/255;
+orange = [235, 88, 20]/255;
+mustard = [235, 156, 20]/255;
+yellow = [235, 217, 20]/255;
+green1 = [175, 222, 33]/255;
+green2 = [69, 210, 45]/255;
+tale = [28, 227, 154]/255;
+blue1 = [28, 227, 207]/255;
+%blue2 = [28, 210, 227]/255;
+blue3 = [28, 161, 227]/255;
+%blue4 = [34, 90, 221]/255;
+purple = [144, 117, 219]/255;
+lavander = [184, 117, 219]/255;
+pink1 = [219, 117, 219]/255;
+pink2 = [219, 117, 155]/255;
+
+colors_palette = [red; orange; mustard; yellow; green1; green2; tale; blue1; blue3; purple; lavander; pink1];
 
 %% data gathering
 data = csvread('../../data/BarronErev2003_Thaler_replication.csv');
@@ -207,6 +228,7 @@ if pop_stats
 end
 
 %% Subjects statistics
+%% PMAX SUBPLOTS
 if subj_stats
     figure();
     FW = 20;
@@ -215,14 +237,14 @@ if subj_stats
     % data problem 1
     for subj_id = 1:num_subjects
         subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
-        pmax_part1 = sum(subj_data(1:50,choice_col)==choice_HI)/50;
-        pmax_part2 = sum(subj_data(51:100,choice_col)==choice_HI)/50;
-        pmax_part3 = sum(subj_data(101:150,choice_col)==choice_HI)/50;
-        pmax_part4 = sum(subj_data(151:200,choice_col)==choice_HI)/50;
-        fprintf('p1, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,pmax_part1,pmax_part2,pmax_part3,pmax_part4);
-        plot([1 2 3 4],[pmax_part1 pmax_part2 pmax_part3 pmax_part4],'LineWidth',LW);
+        payoffs_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+        payoffs_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+        payoffs_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+        payoffs_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+        fprintf('p1, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW,'Color',colors_palette(subj_id,:));
         axis([0.75,4.25,0,1]);
-        title('Problem 1')
+        title('Condition 1')
         set(gca,'FontSize',FW)
         ylabel('PMax')
         xticks([1,2,3,4])
@@ -236,16 +258,16 @@ if subj_stats
     % data problem 2
     for subj_id = 1:num_subjects
         subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
-        pmax_part1 = sum(subj_data(1:50,choice_col)==choice_HI)/50;
-        pmax_part2 = sum(subj_data(51:100,choice_col)==choice_HI)/50;
-        pmax_part3 = sum(subj_data(101:150,choice_col)==choice_HI)/50;
-        pmax_part4 = sum(subj_data(151:200,choice_col)==choice_HI)/50;
-        fprintf('p2, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,pmax_part1,pmax_part2,pmax_part3,pmax_part4);
-        plot([1 2 3 4],[pmax_part1 pmax_part2 pmax_part3 pmax_part4],'LineWidth',LW);
+        payoffs_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+        payoffs_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+        payoffs_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+        payoffs_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+        fprintf('p2, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW,'Color',colors_palette(subj_id,:));
         axis([0.75,4.25,0,1]);
-        title('Problem 2')
+        title('Condition 2')
         set(gca,'FontSize',FW)
-        xlabel('Interactions')
+        xlabel('Trials')
         xticks([1,2,3,4])
         xticklabels({'50','100','150','200'})
     end
@@ -257,18 +279,84 @@ if subj_stats
     % data problem 3
     for subj_id = 1:num_subjects
         subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
-        pmax_part1 = sum(subj_data(1:50,choice_col)==choice_HI)/50;
-        pmax_part2 = sum(subj_data(51:100,choice_col)==choice_HI)/50;
-        pmax_part3 = sum(subj_data(101:150,choice_col)==choice_HI)/50;
-        pmax_part4 = sum(subj_data(151:200,choice_col)==choice_HI)/50;
-        fprintf('p3, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,pmax_part1,pmax_part2,pmax_part3,pmax_part4);
-        plot([1 2 3 4],[pmax_part1 pmax_part2 pmax_part3 pmax_part4],'LineWidth',LW);
+        payoffs_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+        payoffs_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+        payoffs_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+        payoffs_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+        fprintf('p3, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW,'Color',colors_palette(subj_id,:));
         axis([0.75,4.25,0,1]);
-        title('Problem 3')
+        title('Condition 3')
         set(gca,'FontSize',FW)
         xticks([1,2,3,4])
         xticklabels({'50','100','150','200'})
-
+    end
+    legend({'1','2','3','4','5','6','7','8','9','10','11','12'},'Location','SouthEast');
+    hold off;
+    
+    %% PAYOFFS SUBPLOTS
+    figure();
+    FW = 20;
+    subplot(1,3,1);
+    hold on;
+    % data problem 1
+    for subj_id = 1:num_subjects
+        subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
+        payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
+        payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
+        payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
+        payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
+        fprintf('p1, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW-2,'Color',colors_palette(subj_id,:));
+        xlim([0.75,4.25]);
+        title('Condition 1')
+        set(gca,'FontSize',FW)
+        ylabel('Average Payoff')
+        xticks([1,2,3,4])
+        xticklabels({'50','100','150','200'})
     end
     hold off;
+
+
+    subplot(1,3,2);
+    hold on;
+    % data problem 2
+    for subj_id = 1:num_subjects
+        subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
+        payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
+        payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
+        payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
+        payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
+        fprintf('p2, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW-2,'Color',colors_palette(subj_id,:));
+        xlim([0.75,4.25]);
+        title('Condition 2')
+        set(gca,'FontSize',FW)
+        xlabel('Trials')
+        xticks([1,2,3,4])
+        xticklabels({'50','100','150','200'})
+    end
+    hold off;
+
+
+    subplot(1,3,3);
+    hold on;
+    % data problem 3
+    for subj_id = 1:num_subjects
+        subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
+        payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
+        payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
+        payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
+        payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
+        fprintf('p3, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW-2,'Color',colors_palette(subj_id,:));
+        xlim([0.75,4.25]);
+        title('Condition 3')
+        set(gca,'FontSize',FW)
+        xticks([1,2,3,4])
+        xticklabels({'50','100','150','200'})
+    end
+    legend({'1','2','3','4','5','6','7','8','9','10','11','12'},'Location','SouthEast');
+    hold off;
+    
 end
