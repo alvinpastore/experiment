@@ -2,7 +2,7 @@ from __future__ import division
 import numpy as np
 from math import log
 import constants
-
+import random
 
 # class Model encapsulates all the logic of a model
 # set up the Model with parameters set and specifying the modelling modules
@@ -69,6 +69,30 @@ class Model:
             action_log_probability = self.beta * self.action_values[self.current_state][selected_action] - log(denominator)
 
         self.update_likelihood(action_log_probability)
+
+    def pick_action(self):
+        # choose an action probabilistically
+        # implements softmax action selection rule according to the state space configuration
+
+        denominator = 0
+
+        if self.state_config == constants.STATELESS:
+            for act_i in xrange(self.n_actions):
+                denominator += np.exp(self.beta * self.action_values[act_i])
+
+            prob_action_a = np.exp(self.beta * self.action_values[0]) / denominator
+
+        else:   # in case of the 2 state space configurations
+            for act_i in xrange(self.n_actions):
+                denominator += np.exp(self.beta * self.action_values[self.current_state][act_i])
+
+            prob_action_a = np.exp(self.beta * self.action_values[self.current_state][0]) / denominator
+
+        # pick action
+        if random.random() < prob_action_a:
+            return 0
+        else:
+            return 1
 
     def get_reward(self, raw_reward):
         # updates the performance (accumulated payoffs) of the subject and
