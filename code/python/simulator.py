@@ -10,6 +10,21 @@ from operator import add, div
 from Model import Model
 from Model import constants
 
+# reads the parameters estimated with MLE and AIC_weights and
+# stores them into a dictionary (subj: params)for each condition
+def read_subj_parameters(weighted_average_models_file_name):
+
+    params = {0: {}, 1: {}, 2: {}}
+
+    with open(weighted_average_models_file_name, 'r') as weighted_average_models:
+        lines = [l.strip().split(',') for l in weighted_average_models.readlines()]
+
+    for l in lines:
+        pr_id = int(float(l[0]))
+        su_id = int(float(l[1]))
+        params[pr_id][su_id] = (float(l[2]), float(l[3]), float(l[4]))
+
+    return params
 
 # reads the parameters estimated with MLE and AIC_weights and
 # averages them into a single set of params for each condition
@@ -83,16 +98,18 @@ if __name__ == '__main__':
 
     n_probs = 3         # number of problems
     n_subj = 12         # number of subjects
-    n_iterations = 200  # number of iterations for smoothing the simulated choices
+    n_iterations = 1000  # number of iterations for smoothing the simulated choices
     n_trials = 200      # number of choice interactions
     n_models = 15       # number of model configurations
 
     # problem condition : payoff distributions (1 low, 0 high)
+    #TODO invert 0 and 1 and make sure is in line with the other codes
     problems = {0: {1: (25, 17.7),   0: (100, 354)},
                 1: {1: (1225, 17.7), 0: (1300, 354)},
                 2: {1: (1225, 17.7), 0: (1300, 17.7)}}
 
     avg_params = read_avg_parameters(constants.RESULTS_FILE_PATH + file_name_csv)
+    subj_params = read_subj_parameters(constants.RESULTS_FILE_PATH + file_name_csv)
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
     learning_rules = (constants.Q_LEARNING, constants.AVG_TRACKING)
@@ -100,26 +117,34 @@ if __name__ == '__main__':
     model_configurations = get_config_permutations(state_spaces, learning_rules, reward_functions)
 
     choices = {0: [], 1: [], 2: []}
+    smoothing_denominator = n_models * n_iterations * n_subj
 
     for prob_id in xrange(n_probs):
-        print problems[prob_id]
-
-        # use the average parameter for the current condition
-        params = [avg_params['alpha'][prob_id], avg_params['beta'][prob_id], avg_params['gamma'][prob_id]]
+        prob_time = time.time()
 
         simulated_choices = [0] * n_trials
 
-        # iterate over model configurations and the number of iterations (for smoothing)
-        for configuration in model_configurations:
-            print 'config ', configuration
+        for subj_id in xrange(1, n_subj+1):
+            subj_time = time.time()
+            print '{} - {} '.format(prob_id, subj_id)
 
-            for iteration in xrange(n_iterations):
+            params = subj_params[prob_id][subj_id]
 
-                # run simulation
-                simulated_choices = map(add, simulated_choices, model_simulate(params, configuration))
+            # iterate over model configurations and the number of iterations (for smoothing)
+            for configuration in model_configurations:
+                #print 'config ', configuration
 
-        choices[prob_id] = [float(x)/(n_models * n_iterations) for x in simulated_choices]
+                for iteration in xrange(n_iterations):
 
+                    # run simulation
+                    simulated_choices = map(add, simulated_choices, model_simulate(params, configuration))
+            print 'subj {} sec'.format(time.time()-subj_time)
+        choices[prob_id] = [float(x)/smoothing_denominator for x in simulated_choices]
+
+        for choice in choices[prob_id]:
+            print choice
+
+        print 'prob {} sec'.format(time.time()-prob_time)
     for prob_id, results in choices.iteritems():
         print 'problem ', prob_id
         print results
