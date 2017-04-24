@@ -1,12 +1,12 @@
-pop_stats = 0;
+pop_stats = 1;
 subj_stats = 1;
 
 close all;
 %% static variables
 hist_bins_HI = 100;
 hist_bins_LO = 50;
-LW = 4;
-FS = 25;
+LINEWIDTH = 4;
+FONTSIZE = 25;
 num_subjects = 12;
 choice_HI = 1;
 choice_LO = 2;
@@ -31,9 +31,9 @@ green1 = [175, 222, 33]/255;
 green2 = [69, 210, 45]/255;
 tale = [28, 227, 154]/255;
 blue1 = [28, 227, 207]/255;
-%blue2 = [28, 210, 227]/255;
+blue2 = [28, 210, 227]/255;
 blue3 = [28, 161, 227]/255;
-%blue4 = [34, 90, 221]/255;
+blue4 = [34, 90, 221]/255;
 purple = [144, 117, 219]/255;
 lavander = [184, 117, 219]/255;
 pink1 = [219, 117, 219]/255;
@@ -41,7 +41,7 @@ pink2 = [219, 117, 155]/255;
 
 colors_palette = [red; orange; mustard; yellow; green1; green2; tale; blue1; blue3; purple; lavander; pink1];
 
-%% data gathering
+%% data fetch
 data = csvread('../../data/BarronErev2003_Thaler_replication.csv');
 
 % data separation into problems
@@ -90,13 +90,13 @@ if pop_stats
     ax = gca;
     ax.YColor = 'Black'; 
     %plot(x,x,'r-','LineWidth',LW); identity is too wide in the y axis
-    plot(x,yPT+new_range,'Color',blue,'LineStyle','-','LineWidth',LW);
-    plot(x,y_tanh+new_range,'Color',green,'LineStyle','-','LineWidth',LW);
+    plot(x,yPT+new_range,'Color',blue3,'LineStyle','-','LineWidth',LINEWIDTH);
+    plot(x,y_tanh+new_range,'Color',green1,'LineStyle','-','LineWidth',LINEWIDTH);
     ylabel('Reward functions output')
     xlim([-800 800])
     xticks([-750 -500 -250 0 250 500 750]);
     %xlim([min(payoffs_p1A) max(payoffs_p1A)]);
-    set(gca,'FontSize',FS);
+    set(gca,'FontSize',FONTSIZE);
     hold off;
 
     % Problem 2
@@ -115,12 +115,12 @@ if pop_stats
     ax = gca;
     ax.YColor = 'Black'; 
     %plot(x,x,'r-','LineWidth',LW); identity is too wide in the y axis
-    plot(x,yPT+new_range,'Color',blue,'LineStyle','-','LineWidth',LW);
-    plot(x,y_tanh+new_range,'Color',green,'LineStyle','-','LineWidth',LW);
+    plot(x,yPT+new_range,'Color',blue3,'LineStyle','-','LineWidth',LINEWIDTH);
+    plot(x,y_tanh+new_range,'Color',green1,'LineStyle','-','LineWidth',LINEWIDTH);
     ylabel('Reward functions output')
     xlim([400 2000]);
     xticks([600 1000 1400 1800]);
-    set(gca,'FontSize',FS);
+    set(gca,'FontSize',FONTSIZE);
     hold off;
 
     % Problem 3
@@ -139,13 +139,13 @@ if pop_stats
     ax = gca;
     ax.YColor = 'Black'; 
     %plot(x,x,'r-','LineWidth',LW); identity is too wide in the y axis
-    plot(x,yPT+new_range,'Color',blue,'LineStyle','-','LineWidth',LW);
-    plot(x,y_tanh+new_range,'Color',green,'LineStyle','-','LineWidth',LW);
+    plot(x,yPT+new_range,'Color',blue3,'LineStyle','-','LineWidth',LINEWIDTH);
+    plot(x,y_tanh+new_range,'Color',green1,'LineStyle','-','LineWidth',LINEWIDTH);
     xlim([1150 1350]);
     ylabel('Reward functions output')
     %yticks([-200 -100 0 100 200])
     xticks([1200 1250 1300])
-    set(gca,'FontSize',FS);
+    set(gca,'FontSize',FONTSIZE);
     hold off;
     
     %% subplots 
@@ -237,12 +237,12 @@ if subj_stats
     % data problem 1
     for subj_id = 1:num_subjects
         subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
-        payoffs_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
-        payoffs_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
-        payoffs_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
-        payoffs_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
-        fprintf('p1, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW,'Color',colors_palette(subj_id,:));
+        choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+        choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+        choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+        choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+        fprintf('p1, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
+        plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
         axis([0.75,4.25,0,1]);
         title('Condition 1')
         set(gca,'FontSize',FW)
@@ -258,12 +258,12 @@ if subj_stats
     % data problem 2
     for subj_id = 1:num_subjects
         subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
-        payoffs_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
-        payoffs_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
-        payoffs_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
-        payoffs_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
-        fprintf('p2, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW,'Color',colors_palette(subj_id,:));
+        choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+        choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+        choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+        choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+        fprintf('p2, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
+        plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
         axis([0.75,4.25,0,1]);
         title('Condition 2')
         set(gca,'FontSize',FW)
@@ -279,12 +279,12 @@ if subj_stats
     % data problem 3
     for subj_id = 1:num_subjects
         subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
-        payoffs_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
-        payoffs_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
-        payoffs_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
-        payoffs_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
-        fprintf('p3, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW,'Color',colors_palette(subj_id,:));
+        choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+        choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+        choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+        choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+        fprintf('p3, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
+        plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
         axis([0.75,4.25,0,1]);
         title('Condition 3')
         set(gca,'FontSize',FW)
@@ -307,7 +307,7 @@ if subj_stats
         payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
         payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
         fprintf('p1, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW-2,'Color',colors_palette(subj_id,:));
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
         xlim([0.75,4.25]);
         title('Condition 1')
         set(gca,'FontSize',FW)
@@ -328,7 +328,7 @@ if subj_stats
         payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
         payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
         fprintf('p2, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW-2,'Color',colors_palette(subj_id,:));
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
         xlim([0.75,4.25]);
         title('Condition 2')
         set(gca,'FontSize',FW)
@@ -349,7 +349,7 @@ if subj_stats
         payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
         payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
         fprintf('p3, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LW-2,'Color',colors_palette(subj_id,:));
+        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
         xlim([0.75,4.25]);
         title('Condition 3')
         set(gca,'FontSize',FW)
