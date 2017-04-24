@@ -55,10 +55,10 @@ def read_avg_parameters(weighted_average_models_file_name):
 
 def model_simulate(*args):
 
-    parameters, config = args
+    params, configuration = args
 
     # generate a model with theta and configuration
-    model = Model.Model(parameters, *config)
+    model = Model.Model(params, *configuration)
 
     simulated_values = {'choices': [], 'payoffs': []}
 
@@ -151,7 +151,8 @@ if __name__ == '__main__':
 
             print '{} - {} : {} secs'.format(prob_id, subj_id, time.time() - subj_time)
 
-        choices[prob_id] = [float(x)/smoothing_denominator for x in simulated_choices]
+        # subtract from 1 because of values (hi=0 lo=1)
+        choices[prob_id] = [1-(float(x)/smoothing_denominator) for x in simulated_choices]
         payoffs[prob_id] = [float(x)/smoothing_denominator for x in simulated_payoffs]
 
         print 'prob {} sec'.format(time.time() - prob_time)
