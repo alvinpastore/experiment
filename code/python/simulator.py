@@ -58,23 +58,24 @@ def model_simulate(*args):
     # generate a model with theta and configuration
     model = Model.Model(params, *configuration)
 
-    sim_choices = []
+    simulated_values = {'choices': [], 'payoffs': []}
 
     for trial_i in xrange(n_trials):
 
         # pick action softmax
         action = model.pick_action()
 
-        # store choice
-        sim_choices.append(action)
-
         # receive reward from problem for action picked
         reward = get_payoff(action)
+
+        # store choice and payoff
+        simulated_values['choices'].append(action)
+        simulated_values['payoffs'].append(reward)
 
         # update action values
         model.update_action_values(reward, action)
 
-    return sim_choices
+    return simulated_values
 
 
 def get_payoff(action):
@@ -98,15 +99,17 @@ if __name__ == '__main__':
 
     n_probs = 3         # number of problems
     n_subj = 12         # number of subjects
-    n_iterations = 1000  # number of iterations for smoothing the simulated choices
+    n_iterations = 10  # number of iterations for smoothing the simulated choices
     n_trials = 200      # number of choice interactions
     n_models = 15       # number of model configurations
 
-    # problem condition : payoff distributions (1 low, 0 high)
-    #TODO invert 0 and 1 and make sure is in line with the other codes
-    problems = {0: {1: (25, 17.7),   0: (100, 354)},
-                1: {1: (1225, 17.7), 0: (1300, 354)},
-                2: {1: (1225, 17.7), 0: (1300, 17.7)}}
+    # original data choice code
+    # choice_HI = 1;
+    # choice_LO = 2;
+    # problem condition : payoff distributions (0 high, 1 low)
+    problems = {0: {0: ( 100, 354),  1: (  25, 17.7)},
+                1: {0: (1300, 354),  1: (1225, 17.7)},
+                2: {0: (1300, 17.7), 1: (1225, 17.7)}}
 
     avg_params = read_avg_parameters(constants.RESULTS_FILE_PATH + file_name_csv)
     subj_params = read_subj_parameters(constants.RESULTS_FILE_PATH + file_name_csv)
@@ -117,37 +120,49 @@ if __name__ == '__main__':
     model_configurations = get_config_permutations(state_spaces, learning_rules, reward_functions)
 
     choices = {0: [], 1: [], 2: []}
+    payoffs = {0: [], 1: [], 2: []}
     smoothing_denominator = n_models * n_iterations * n_subj
 
     for prob_id in xrange(n_probs):
         prob_time = time.time()
 
         simulated_choices = [0] * n_trials
+        simulated_payoffs = [0] * n_trials
 
+        # iterate over subjects, model configurations and smoothing iterations
         for subj_id in xrange(1, n_subj+1):
             subj_time = time.time()
-            print '{} - {} '.format(prob_id, subj_id)
 
             params = subj_params[prob_id][subj_id]
 
-            # iterate over model configurations and the number of iterations (for smoothing)
             for configuration in model_configurations:
-                #print 'config ', configuration
 
                 for iteration in xrange(n_iterations):
 
                     # run simulation
-                    simulated_choices = map(add, simulated_choices, model_simulate(params, configuration))
-            print 'subj {} sec'.format(time.time()-subj_time)
+                    temp_values = model_simulate(params, configuration)
+                    temp_choices = temp_values['choices']
+                    temp_payoffs = temp_values['payoffs']
+
+                    simulated_choices = map(add, simulated_choices, temp_choices)
+                    simulated_payoffs = map(add, simulated_payoffs, temp_payoffs)
+
+            print '{} - {} : {} secs'.format(prob_id, subj_id, time.time() - subj_time)
+
         choices[prob_id] = [float(x)/smoothing_denominator for x in simulated_choices]
+        payoffs[prob_id] = [float(x)/smoothing_denominator for x in simulated_payoffs]
 
-        for choice in choices[prob_id]:
-            print choice
+        print 'prob {} sec'.format(time.time() - prob_time)
 
-        print 'prob {} sec'.format(time.time()-prob_time)
-    for prob_id, results in choices.iteritems():
-        print 'problem ', prob_id
-        print results
+    for prob_id, smoothed_choice_set in choices.iteritems():
+        print 'choices problem ', prob_id
+        print smoothed_choice_set
         print
-    print 'total time {}'.format(time.time() - t_total)
+
+    for prob_id, smoothed_payoff_set in payoffs.iteritems():
+        print 'payoffs problem ', prob_id
+        print smoothed_payoff_set
+        print
+
+    print 'total {} sec'.format(time.time() - t_total)
     print 'completed ' + str(datetime.datetime.now())
