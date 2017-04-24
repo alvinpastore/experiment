@@ -5,16 +5,17 @@ import time
 import datetime
 
 from numpy.random import normal
-from operator import add, div
+from operator import add
 
 from Model import Model
 from Model import constants
+
 
 # reads the parameters estimated with MLE and AIC_weights and
 # stores them into a dictionary (subj: params)for each condition
 def read_subj_parameters(weighted_average_models_file_name):
 
-    params = {0: {}, 1: {}, 2: {}}
+    parameters = {0: {}, 1: {}, 2: {}}
 
     with open(weighted_average_models_file_name, 'r') as weighted_average_models:
         lines = [l.strip().split(',') for l in weighted_average_models.readlines()]
@@ -22,9 +23,10 @@ def read_subj_parameters(weighted_average_models_file_name):
     for l in lines:
         pr_id = int(float(l[0]))
         su_id = int(float(l[1]))
-        params[pr_id][su_id] = (float(l[2]), float(l[3]), float(l[4]))
+        parameters[pr_id][su_id] = (float(l[2]), float(l[3]), float(l[4]))
 
-    return params
+    return parameters
+
 
 # reads the parameters estimated with MLE and AIC_weights and
 # averages them into a single set of params for each condition
@@ -53,10 +55,10 @@ def read_avg_parameters(weighted_average_models_file_name):
 
 def model_simulate(*args):
 
-    params, configuration = args
+    parameters, config = args
 
     # generate a model with theta and configuration
-    model = Model.Model(params, *configuration)
+    model = Model.Model(parameters, *config)
 
     simulated_values = {'choices': [], 'payoffs': []}
 
