@@ -25,6 +25,8 @@ class Model:
         self.initial_action_value = 0
         self.accumulated_payoffs = 0
         self.current_state = 0
+        self.choices = []
+        self.payoffs = []
 
         # initialise structure to store state-action values
         if self.state_config == constants.STATELESS:
@@ -155,6 +157,15 @@ class Model:
             # in the latest outcome configuration return state 0 when last payoff was profit, 1 otherwise
             return constants.GAIN if reward >= 0 else constants.LOSS
 
+    def store_choices(self, simulated_values):
+        self.choices = simulated_values['choices']
+        self.payoffs = simulated_values['payoffs']
+
+    def get_pmax(self):
+        half_size = int(len(self.choices)/2)
+        pmax_block1 = sum(self.choices[:half_size]) / half_size
+        pmax_block2 = sum(self.choices[half_size:]) / half_size
+        return pmax_block1, pmax_block2
 
 if __name__ == '__main__':
 
