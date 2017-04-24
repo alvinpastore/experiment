@@ -79,7 +79,7 @@ if __name__ == '__main__':
     # file_name = 'test_greedy_random_generic.csv'
     results_filename = 'results_' + file_name[:-4] + '__' + str(datetime.datetime.now())
     results_filename = results_filename.split()[0]  # split and take first to remove timestamp (after space)
-    results_filename += '.csv'
+    results_filename += '_MLE.csv'
     print 'Results file: {}'.format(results_filename)
 
     state_spaces = (constants.STATELESS, constants.FULL_HISTORY, constants.LATEST_OUTCOME)
@@ -125,8 +125,6 @@ if __name__ == '__main__':
             results[problem_id][subj_id] = {}
 
             transactions = zip(subject.get_choices(), subject.get_outcomes())
-
-            MLE = MLE_INIT
 
             # iterate over model combinations and guess points
             for configuration in model_configurations:

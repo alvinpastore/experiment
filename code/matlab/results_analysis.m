@@ -21,7 +21,7 @@ WEIGHT_THRESHOLD = 0.95; % "For a 95% confidence set on the actual K-L best mode
 %% LOAD DATA
 file_path = '../../results/';
 %file_name = 'results_test_greedy_random_generic__2017-03-02.csv'; %TEST
-file_name = 'results_BarronErev2003_Thaler_replication__2017-03-20.csv';
+file_name = 'results_BarronErev2003_Thaler_replication__2017-03-20_MLE.csv';
 fid = fopen([file_path,file_name]);
 format_spec = '%f %f %f %f %f %f %s %s %s %*[^\n]';
 results_data = textscan(fid, format_spec, 'delimiter', ',');
