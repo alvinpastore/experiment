@@ -17,14 +17,14 @@ def model_fit(*args):
 
     params, transactions, configuration = args
 
-    # generate a model with theta and configuration
-    model = Model.Model(params, *configuration)
-
-    simulated_values = {'choices': [], 'payoffs': []}
-
     MSD = 0
 
     for iteration in xrange(n_iterations):
+
+        # generate a model with theta and configuration
+        model = Model.Model(params, *configuration)
+
+        simulated_values = {'choices': [], 'payoffs': []}
 
         for trial_i in xrange(len(transactions)):
             action = model.pick_action()
@@ -48,7 +48,7 @@ def model_fit(*args):
 
         MSD += mean_squared_deviation([pmax_observed1, pmax_observed2], [pmax_predicted1, pmax_predicted2])
 
-    return MSD/n_iterations
+    return MSD/n_iterations, pmax_predicted1, pmax_predicted2
 
 
 def get_payoff(action):
@@ -83,11 +83,13 @@ def save_results(file_path, results_filename, results):
                 for config, resl in subj.iteritems():
                     print 'config ', config
                     print 'params ', resl[0]
-                    print 'MLE ', resl[1]
+                    print 'MSD ', resl[1]
                     print
                     results_file.write(str(problem_id) + ',')  # Problem ID
                     results_file.write(str(subj_id) + ',')     # Subject ID
-                    results_file.write(str(resl[1]) + ',')     # MLE
+                    results_file.write(str(resl[1]) + ',')     # MSD
+                    results_file.write(str(resl[2]) + ',')     # pmax1
+                    results_file.write(str(resl[3]) + ',')     # pmax2
                     results_file.write(str(resl[0][0]) + ',')  # alpha
                     results_file.write(str(resl[0][1]) + ',')  # beta
                     results_file.write(str(resl[0][2]) + ',')  # gamma
@@ -100,8 +102,8 @@ if __name__ == '__main__':
     t_total = time.time()
     VERBOSE = 0
     MSD_INIT = 9999
-    TOLERANCE = 1e-4  # 0.0001
-    n_iterations = 100
+    #TOLERANCE = 1e-4  # 0.0001
+    n_iterations = 200
     # original data choice code
     # choice_HI = 1;
     # choice_LO = 2;
@@ -115,7 +117,7 @@ if __name__ == '__main__':
     # file_name = 'test_greedy_random_generic.csv'
     results_filename = 'results_' + file_name[:-4] + '__' + str(datetime.datetime.now())
     results_filename = results_filename.split()[0]  # split and take first to remove timestamp (after space)
-    results_filename += '_MSD.csv'
+    results_filename += '_MSD_' + str(n_iterations) + 'iterations.csv'
     print 'Results file: {}'.format(results_filename)
 
     # reduce search space based on indications from descriptive MLE based information
@@ -124,12 +126,12 @@ if __name__ == '__main__':
     reward_functions = (constants.IDENTITY, constants.PT_VALUE_FUNC)
     model_configurations = get_config_permutations(state_spaces, learning_rules, reward_functions)
 
-    bounds = ((0.00001, 1), (0.00001, 1), (0.00001, 1))
+    #bounds = ((0.00001, 1), (0.00001, 1), (0.00001, 1))
 
     # # full search
-    alphas = [0.0001,  0.001,  0.01, 0.03, 0.1, 0.5, 0.7]
-    betas =  [0.0001,  0.001,  0.01, 0.03, 0.1, 0.5, 0.7]
-    gammas = [0.0001,  0.001,  0.01, 0.03, 0.1, 0.3, 0.7]
+    alphas = [0.0001, 0.0003,  0.001, 0.003,  0.01,  0.03, 0.1, 0.5, 0.7]
+    betas =  [0.0001, 0.0003,  0.001, 0.003,  0.01,  0.03, 0.1, 0.5, 0.7]
+    gammas = [0.0001, 0.0003,  0.001, 0.003,  0.01,  0.03, 0.1, 0.5, 0.7]
 
     # simpler
     # alphas = [0.0001,  0.001, 0.1, 0.3]
@@ -174,25 +176,26 @@ if __name__ == '__main__':
                 results[problem_id][subj_id][configuration] = ([0, 0, 0], MSD_INIT)
 
                 for guesspoints in guesspoints_permutations:
-                    #TODO remove gradient descent and use gridsearch
-                    # minimise the fitting function
-                    minimisation_results = minimize(model_fit, guesspoints,
-                                                    args=(transactions, configuration), bounds=bounds,
-                                                    method='TNC', options={'ftol': TOLERANCE, 'xtol': TOLERANCE})
 
-                    # if successful and MSD lower than current estimate,
-                    # store log_lik (MSD), params and MODEL config
-                    # store the results of the configuration if the LL is better than the previous one
-                    if minimisation_results['success'] \
-                            and minimisation_results['fun'] < results[problem_id][subj_id][configuration][1]:
+                    msd, pmax1, pmax2 = model_fit(guesspoints, transactions, configuration)
 
-                        alpha = minimisation_results['x'][0]
-                        beta = minimisation_results['x'][1]
-                        gamma = minimisation_results['x'][2] if constants.Q_LEARNING in configuration[1] else 0
+                    # if MSD lower than current estimate,
+                    # store MSD, params and MODEL config
+                    if msd < results[problem_id][subj_id][configuration][1]:
+                        alpha = guesspoints[0]
+                        beta = guesspoints[1]
+                        gamma = guesspoints[2] if constants.Q_LEARNING in configuration[1] else 0
                         params = [alpha, beta, gamma]
-                        results[problem_id][subj_id][configuration] = (params, minimisation_results['fun'])
+                        results[problem_id][subj_id][configuration] = (params, msd, pmax1, pmax2)
 
-                print '{5:.2f} s -> MSD:{0:.5f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.format(results[problem_id][subj_id][configuration][1], configuration, results[problem_id][subj_id][configuration][0][0], results[problem_id][subj_id][configuration][0][1], results[problem_id][subj_id][configuration][0][2], time.time()-t_config)
+                print '{5:.2f}s - MSD:{0:.5f} - pmax1-2:{6:.2f} - {7:.2f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.\
+                    format(results[problem_id][subj_id][configuration][1], configuration,
+                           results[problem_id][subj_id][configuration][0][0],
+                           results[problem_id][subj_id][configuration][0][1],
+                           results[problem_id][subj_id][configuration][0][2],
+                           time.time() - t_config,
+                           results[problem_id][subj_id][configuration][2],
+                           results[problem_id][subj_id][configuration][3],)
                 print
 
             print 'time elapsed for subject {}: {}'.format(subj_id, time.time() - t_subj)
