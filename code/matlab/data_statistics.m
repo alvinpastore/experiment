@@ -1,5 +1,7 @@
-pop_stats = 1;
+clear all;
+pop_stats = 0;
 subj_stats = 1;
+SUBJECTIVE_LEARNING_CURVES_AND_PAYOFFS = 0;
 
 close all;
 %% static variables
@@ -7,6 +9,7 @@ hist_bins_HI = 100;
 hist_bins_LO = 50;
 LINEWIDTH = 4;
 FONTSIZE = 25;
+MARKERSIZE = 10;
 num_subjects = 12;
 choice_HI = 1;
 choice_LO = 2;
@@ -228,135 +231,256 @@ if pop_stats
 end
 
 %% Subjects statistics
-%% PMAX SUBPLOTS
+%% PMAX SUBPLOTS individual learning curve
 if subj_stats
-    figure();
-    FW = 20;
-    subplot(1,3,1);
-    hold on;
-    % data problem 1
-    for subj_id = 1:num_subjects
-        subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
-        choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
-        choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
-        choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
-        choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
-        fprintf('p1, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
-        plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
-        axis([0.75,4.25,0,1]);
-        title('Condition 1')
-        set(gca,'FontSize',FW)
-        ylabel('PMax')
-        xticks([1,2,3,4])
-        xticklabels({'50','100','150','200'})
+    if SUBJECTIVE_LEARNING_CURVES_AND_PAYOFFS
+
+        figure();
+        FONTSIZE = 20;
+        subplot(1,3,1);
+        hold on;
+        % data problem 1
+        for subj_id = 1:num_subjects
+            subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
+            choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+            choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+            choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+            choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+            fprintf('p1, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
+            plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
+            axis([0.75,4.25,0,1]);
+            title('Condition 1')
+            set(gca,'FontSize',FONTSIZE)
+            ylabel('PMax')
+            xticks([1,2,3,4])
+            xticklabels({'50','100','150','200'})
+        end
+        hold off;
+
+
+        subplot(1,3,2);
+        hold on;
+        % data problem 2
+        for subj_id = 1:num_subjects
+            subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
+            choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+            choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+            choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+            choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+            fprintf('p2, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
+            plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
+            axis([0.75,4.25,0,1]);
+            title('Condition 2')
+            set(gca,'FontSize',FONTSIZE)
+            xlabel('Trials')
+            xticks([1,2,3,4])
+            xticklabels({'50','100','150','200'})
+        end
+        hold off;
+
+
+        subplot(1,3,3);
+        hold on;
+        % data problem 3
+        for subj_id = 1:num_subjects
+            subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
+            choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
+            choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
+            choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
+            choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
+            fprintf('p3, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
+            plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
+            axis([0.75,4.25,0,1]);
+            title('Condition 3')
+            set(gca,'FontSize',FONTSIZE)
+            xticks([1,2,3,4])
+            xticklabels({'50','100','150','200'})
+        end
+        legend({'1','2','3','4','5','6','7','8','9','10','11','12'},'Location','SouthEast');
+        hold off;
+
+
+
+        %% PAYOFFS SUBPLOTS
+        figure();
+        FONTSIZE = 20;
+        subplot(1,3,1);
+        hold on;
+        % data problem 1
+        for subj_id = 1:num_subjects
+            subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
+            payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
+            payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
+            payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
+            payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
+            fprintf('p1, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+            plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
+            xlim([0.75,4.25]);
+            title('Condition 1')
+            set(gca,'FontSize',FONTSIZE)
+            ylabel('Average Payoff')
+            xticks([1,2,3,4])
+            xticklabels({'50','100','150','200'})
+        end
+        hold off;
+
+
+        subplot(1,3,2);
+        hold on;
+        % data problem 2
+        for subj_id = 1:num_subjects
+            subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
+            payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
+            payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
+            payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
+            payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
+            fprintf('p2, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+            plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
+            xlim([0.75,4.25]);
+            title('Condition 2')
+            set(gca,'FontSize',FONTSIZE)
+            xlabel('Trials')
+            xticks([1,2,3,4])
+            xticklabels({'50','100','150','200'})
+        end
+        hold off;
+
+
+        subplot(1,3,3);
+        hold on;
+        % data problem 3
+        for subj_id = 1:num_subjects
+            subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
+            payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
+            payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
+            payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
+            payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
+            fprintf('p3, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
+            plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
+            xlim([0.75,4.25]);
+            title('Condition 3')
+            set(gca,'FontSize',FONTSIZE)
+            xticks([1,2,3,4])
+            xticklabels({'50','100','150','200'})
+        end
+        legend({'1','2','3','4','5','6','7','8','9','10','11','12'},'Location','SouthEast');
+        hold off;
     end
-    hold off;
+    %% PMAX condition learning curve (replication Erev2005)
 
-
-    subplot(1,3,2);
-    hold on;
-    % data problem 2
-    for subj_id = 1:num_subjects
-        subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
-        choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
-        choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
-        choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
-        choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
-        fprintf('p2, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
-        plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
-        axis([0.75,4.25,0,1]);
-        title('Condition 2')
-        set(gca,'FontSize',FW)
-        xlabel('Trials')
-        xticks([1,2,3,4])
-        xticklabels({'50','100','150','200'})
-    end
-    hold off;
-
-
-    subplot(1,3,3);
-    hold on;
-    % data problem 3
-    for subj_id = 1:num_subjects
-        subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
-        choice_part1 = sum(subj_data(block_1,choice_col)==choice_HI)/50;
-        choice_part2 = sum(subj_data(block_2,choice_col)==choice_HI)/50;
-        choice_part3 = sum(subj_data(block_3,choice_col)==choice_HI)/50;
-        choice_part4 = sum(subj_data(block_4,choice_col)==choice_HI)/50;
-        fprintf('p3, subj: %d  pmax 1: %f  2: %f  3: %f  4: %f\n',subj_id,choice_part1,choice_part2,choice_part3,choice_part4);
-        plot([1 2 3 4],[choice_part1 choice_part2 choice_part3 choice_part4],'LineWidth',LINEWIDTH,'Color',colors_palette(subj_id,:));
-        axis([0.75,4.25,0,1]);
-        title('Condition 3')
-        set(gca,'FontSize',FW)
-        xticks([1,2,3,4])
-        xticklabels({'50','100','150','200'})
-    end
-    legend({'1','2','3','4','5','6','7','8','9','10','11','12'},'Location','SouthEast');
-    hold off;
     
-    %% PAYOFFS SUBPLOTS
-    figure();
-    FW = 20;
+    block_1 = 1:100;
+    block_2 = 101:200;
+    cond1 = 1:12;
+    cond2 = 13:24;
+    cond3 = 25:36;
+    LINEWIDTH = 2;
+    FONTSIZE = 25;
+    MARKERSIZE = 10;
+    
+    
+    pmax1_cond1 = 0;
+    pmax2_cond1 = 0;
+    pmax1_cond2 = 0;
+    pmax2_cond2 = 0;
+    pmax1_cond3 = 0;
+    pmax2_cond3 = 0;
+    
+    for subj_id = 1:num_subjects
+        subj_data1 = data_problem_1(data_problem_1(:,2)==subj_id,:);
+        subj_data2 = data_problem_2(data_problem_2(:,2)==subj_id,:);
+        subj_data3 = data_problem_3(data_problem_3(:,2)==subj_id,:);
+        pm1c1 = sum(subj_data1(block_1,choice_col)==choice_HI)/100;
+        pm2c1 = sum(subj_data1(block_2,choice_col)==choice_HI)/100;
+        pm1c2 = sum(subj_data2(block_1,choice_col)==choice_HI)/100;
+        pm2c2 = sum(subj_data2(block_2,choice_col)==choice_HI)/100;
+        pm1c3 = sum(subj_data3(block_1,choice_col)==choice_HI)/100;
+        pm2c3 = sum(subj_data3(block_2,choice_col)==choice_HI)/100;
+        fprintf('cond 1, subj %d p1 %f - p2 %f \n',subj_id,pm1c1,pm2c1);
+        fprintf('cond 2, subj %d p1 %f - p2 %f \n',subj_id,pm1c2,pm2c2);
+        fprintf('cond 3, subj %d p1 %f - p2 %f \n',subj_id,pm1c3,pm2c3);
+        pmax1_cond1 = pmax1_cond1 + pm1c1;
+        pmax2_cond1 = pmax2_cond1 + pm2c1;
+        pmax1_cond2 = pmax1_cond2 + pm1c2;
+        pmax2_cond2 = pmax2_cond2 + pm2c2;
+        pmax1_cond3 = pmax1_cond3 + pm1c3;
+        pmax2_cond3 = pmax2_cond3 + pm2c3;
+    end
+    
+    pmax1_cond1 = pmax1_cond1/num_subjects;
+    pmax2_cond1 = pmax2_cond1/num_subjects;
+    pmax1_cond2 = pmax1_cond2/num_subjects;
+    pmax2_cond2 = pmax2_cond2/num_subjects;
+    pmax1_cond3 = pmax1_cond3/num_subjects;
+    pmax2_cond3 = pmax2_cond3/num_subjects;
+
     subplot(1,3,1);
     hold on;
-    % data problem 1
-    for subj_id = 1:num_subjects
-        subj_data = data_problem_1(data_problem_1(:,2)==subj_id,:);
-        payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
-        payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
-        payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
-        payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
-        fprintf('p1, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
-        xlim([0.75,4.25]);
-        title('Condition 1')
-        set(gca,'FontSize',FW)
-        ylabel('Average Payoff')
-        xticks([1,2,3,4])
-        xticklabels({'50','100','150','200'})
-    end
-    hold off;
-
+    plot([1 2],[pmax1_cond1 pmax2_cond1],'Color','k','Marker','d','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([1 2],[pmax1_cond2 pmax2_cond2],'Color','k','Marker','s','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([1 2],[pmax1_cond3 pmax2_cond3],'Color','k','Marker','^','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([0.5 2.5],[0.25 0.25],'-k');
+    plot([0.5 2.5],[0.5 0.5],'-k');
+    plot([0.5 2.5],[0.75 0.75],'-k');
+    axis([0.5 2.55 0 1]);
+    yticks([0 0.25 0.5 0.75 1])
+    xticks([1 2])
+    title('Observed')
+    ylabel('Pmax')
+    %set(get(gca,'YLabel'),'Rotation',0)
+    set(gca,'FontSize',FONTSIZE);
+    hold off
+    
+    %% PmaxMSD predicted learning curve
+    [Pmax, best_models] = msd_analysis();
+    fprintf('Total: Average MSD score: %f, alpha: %f, beta: %f, gamma: %f\n',mean(best_models(:,3)),mean(best_models(:,6)),mean(best_models(:,7)),mean(best_models(:,8)));
+    fprintf('Cond1: Average MSD score: %f, alpha: %f, beta: %f, gamma: %f\n',mean(best_models(cond1,3)),mean(best_models(cond1,6)),mean(best_models(cond1,7)),mean(best_models(cond1,8)));
+    fprintf('Cond2: Average MSD score: %f, alpha: %f, beta: %f, gamma: %f\n',mean(best_models(cond2,3)),mean(best_models(cond2,6)),mean(best_models(cond2,7)),mean(best_models(cond2,8)));
+    fprintf('Cond3: Average MSD score: %f, alpha: %f, beta: %f, gamma: %f\n',mean(best_models(cond3,3)),mean(best_models(cond3,6)),mean(best_models(cond3,7)),mean(best_models(cond3,8)));
 
     subplot(1,3,2);
-    hold on;
-    % data problem 2
-    for subj_id = 1:num_subjects
-        subj_data = data_problem_2(data_problem_2(:,2)==subj_id,:);
-        payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
-        payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
-        payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
-        payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
-        fprintf('p2, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
-        xlim([0.75,4.25]);
-        title('Condition 2')
-        set(gca,'FontSize',FW)
-        xlabel('Trials')
-        xticks([1,2,3,4])
-        xticklabels({'50','100','150','200'})
-    end
-    hold off;
-
-
+    pmax1_cond1 = mean(Pmax(cond1,1));
+    pmax2_cond1 = mean(Pmax(cond1,2));
+    pmax1_cond2 = mean(Pmax(cond2,1));
+    pmax2_cond2 = mean(Pmax(cond2,2));
+    pmax1_cond3 = mean(Pmax(cond3,1));
+    pmax2_cond3 = mean(Pmax(cond3,2));
+    hold on
+    plot([1 2],[pmax1_cond1 pmax2_cond1],'Color','k','Marker','d','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([1 2],[pmax1_cond2 pmax2_cond2],'Color','k','Marker','s','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([1 2],[pmax1_cond3 pmax2_cond3],'Color','k','Marker','^','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([0.5 2.5],[0.25 0.25],'-k');
+    plot([0.5 2.5],[0.5 0.5],'-k');
+    plot([0.5 2.5],[0.75 0.75],'-k');
+    axis([0.5 2.55 0 1]);
+    yticks([0 0.25 0.5 0.75 1])
+    xticks([1 2])
+    set(gca,'FontSize',FONTSIZE);
+    title('Predicted')
+    hold off
+    
     subplot(1,3,3);
-    hold on;
-    % data problem 3
-    for subj_id = 1:num_subjects
-        subj_data = data_problem_3(data_problem_3(:,2)==subj_id,:);
-        payoffs_part1 = sum(subj_data(block_1,payoff_col))/50;
-        payoffs_part2 = sum(subj_data(block_2,payoff_col))/50;
-        payoffs_part3 = sum(subj_data(block_3,payoff_col))/50;
-        payoffs_part4 = sum(subj_data(block_4,payoff_col))/50;
-        fprintf('p3, subj: %d  payoffs 1: %f  2: %f  3: %f  4: %f\n',subj_id,payoffs_part1,payoffs_part2,payoffs_part3,payoffs_part4);
-        plot([1 2 3 4],[payoffs_part1 payoffs_part2 payoffs_part3 payoffs_part4],'LineWidth',LINEWIDTH-2,'Color',colors_palette(subj_id,:));
-        xlim([0.75,4.25]);
-        title('Condition 3')
-        set(gca,'FontSize',FW)
-        xticks([1,2,3,4])
-        xticklabels({'50','100','150','200'})
-    end
-    legend({'1','2','3','4','5','6','7','8','9','10','11','12'},'Location','SouthEast');
-    hold off;
+    pmax1_cond1 = mean(Pmax(cond1,1));
+    pmax2_cond1 = mean(Pmax(cond1,2));
+    pmax1_cond2 = mean(Pmax(cond2,1));
+    pmax2_cond2 = mean(Pmax(cond2,2));
+    pmax1_cond3 = mean(Pmax(cond3,1));
+    pmax2_cond3 = mean(Pmax(cond3,2));
+    hold on
+    plot([1 2],[0.4 0.45],'Color','k','Marker','d','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([1 2],[0.55 0.6],'Color','k','Marker','s','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([1 2],[0.85 0.95],'Color','k','Marker','^','MarkerFaceColor','k','LineWidth',LINEWIDTH,'MarkerSize',MARKERSIZE);
+    plot([0.5 2.5],[0.25 0.25],'-k');
+    plot([0.5 2.5],[0.5 0.5],'-k');
+    plot([0.5 2.5],[0.75 0.75],'-k');
+    axis([0.5 2.55 0 1]);
+    yticks([0 0.25 0.5 0.75 1])
+    xticks([1 2])
+    set(gca,'FontSize',FONTSIZE);
+    title('RELACS')
+    hold off
+    
+    legend({'N(100,354) or TN(25,17.7)','N(1300,354) or N(1225,17.7)','N(1300,17.7) or N(1225,17.7)'},'Location','SouthEast');
+        
     
 end
