@@ -3,10 +3,9 @@ from __future__ import division
 import itertools
 import time
 import datetime
+import sys
 
-from scipy.optimize import minimize
 from numpy.random import normal
-from numpy import mean
 
 from Model import Model
 from Model import constants
@@ -18,6 +17,11 @@ def model_fit(*args):
     params, transactions, configuration = args
 
     MSD = 0
+
+    observed_choices = zip(*transactions)[0]
+    half_size = int(len(observed_choices) / 2)
+    pmax_observed1 = 1 - (sum(observed_choices[:half_size]) / half_size)
+    pmax_observed2 = 1 - (sum(observed_choices[half_size:]) / half_size)
 
     for iteration in xrange(n_iterations):
 
@@ -38,14 +42,16 @@ def model_fit(*args):
 
         model.store_choices(simulated_values)
 
+        # "one minus" because the maximisation choice is coded with 0
+
         # calculate MSD using observed and predicted transactions
         pmax_predicted1, pmax_predicted2 = model.get_pmax()
+        pmax_predicted1 = 1 - pmax_predicted1
+        pmax_predicted2 = 1 - pmax_predicted2
 
-        observed_choices = zip(*transactions)[0]
-        half_size = int(len(observed_choices)/2)
-        pmax_observed1 = sum(observed_choices[:half_size]) / half_size
-        pmax_observed2 = sum(observed_choices[half_size:]) / half_size
-
+        # TODO this method does not provide a consistent final MSD value
+        # because it averages many MSD values instead of calculating the MSD on the final pmax.
+        # solution adopted: recalculate MSD in MATLAB MSD_analysis
         MSD += mean_squared_deviation([pmax_observed1, pmax_observed2], [pmax_predicted1, pmax_predicted2])
 
     return MSD/n_iterations, pmax_predicted1, pmax_predicted2
@@ -97,13 +103,17 @@ def save_results(file_path, results_filename, results):
                     results_file.write(str(config[1]) + ',')   # learning rule
                     results_file.write(str(config[2]) + '\n')  # reward function
 
-
+''' Routine to estimate the mean squared deviation (MSD or mean squared error MSE)
+    between the predicted proportion of maximisation choices (Pmax) against the observed Pmax'''
 if __name__ == '__main__':
+
+    current_problem = int(sys.argv[1])
+
     t_total = time.time()
     VERBOSE = 0
     MSD_INIT = 9999
     #TOLERANCE = 1e-4  # 0.0001
-    n_iterations = 200
+    n_iterations = int(sys.argv[2])
     # original data choice code
     # choice_HI = 1;
     # choice_LO = 2;
@@ -117,7 +127,8 @@ if __name__ == '__main__':
     # file_name = 'test_greedy_random_generic.csv'
     results_filename = 'results_' + file_name[:-4] + '__' + str(datetime.datetime.now())
     results_filename = results_filename.split()[0]  # split and take first to remove timestamp (after space)
-    results_filename += '_MSD_' + str(n_iterations) + 'iterations.csv'
+    results_filename += '_MSD_' + str(n_iterations) + 'iterations'
+    results_filename += '_prob' + str(current_problem) + '.csv'
     print 'Results file: {}'.format(results_filename)
 
     # reduce search space based on indications from descriptive MLE based information
@@ -154,51 +165,52 @@ if __name__ == '__main__':
     # iterate over problems
     for problem_id, subjects in problem_data.iteritems():
 
-        results[problem_id] = {}
+        if problem_id == current_problem:
+            results[problem_id] = {}
 
-        print 'problem ', problem_id
+            print 'problem ', problem_id
 
-        # iterate over subjects (fetch subject data)
-        for subj_id, subject in subjects.iteritems():
+            # iterate over subjects (fetch subject data)
+            for subj_id, subject in subjects.iteritems():
 
-            t_subj = time.time()
-            print 'subject ', subj_id
+                t_subj = time.time()
+                print 'subject ', subj_id
 
-            results[problem_id][subj_id] = {}
+                results[problem_id][subj_id] = {}
 
-            transactions = zip(subject.get_choices(), subject.get_outcomes())
+                transactions = zip(subject.get_choices(), subject.get_outcomes())
 
-            # iterate over model combinations and guess points
-            for configuration in model_configurations:
-                t_config = time.time()
+                # iterate over model combinations and guess points
+                for configuration in model_configurations:
+                    t_config = time.time()
 
-                # placeholder for first result
-                results[problem_id][subj_id][configuration] = ([0, 0, 0], MSD_INIT)
+                    # placeholder for first result
+                    results[problem_id][subj_id][configuration] = ([0, 0, 0], MSD_INIT)
 
-                for guesspoints in guesspoints_permutations:
+                    for guesspoints in guesspoints_permutations:
 
-                    msd, pmax1, pmax2 = model_fit(guesspoints, transactions, configuration)
+                        msd, pmax1, pmax2 = model_fit(guesspoints, transactions, configuration)
 
-                    # if MSD lower than current estimate,
-                    # store MSD, params and MODEL config
-                    if msd < results[problem_id][subj_id][configuration][1]:
-                        alpha = guesspoints[0]
-                        beta = guesspoints[1]
-                        gamma = guesspoints[2] if constants.Q_LEARNING in configuration[1] else 0
-                        params = [alpha, beta, gamma]
-                        results[problem_id][subj_id][configuration] = (params, msd, pmax1, pmax2)
+                        # if MSD lower than current estimate,
+                        # store MSD, params and MODEL config
+                        if msd < results[problem_id][subj_id][configuration][1]:
+                            alpha = guesspoints[0]
+                            beta = guesspoints[1]
+                            gamma = guesspoints[2] if constants.Q_LEARNING in configuration[1] else 0
+                            params = [alpha, beta, gamma]
+                            results[problem_id][subj_id][configuration] = (params, msd, pmax1, pmax2)
 
-                print '{5:.2f}s - MSD:{0:.5f} - pmax1-2:{6:.2f} - {7:.2f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.\
-                    format(results[problem_id][subj_id][configuration][1], configuration,
-                           results[problem_id][subj_id][configuration][0][0],
-                           results[problem_id][subj_id][configuration][0][1],
-                           results[problem_id][subj_id][configuration][0][2],
-                           time.time() - t_config,
-                           results[problem_id][subj_id][configuration][2],
-                           results[problem_id][subj_id][configuration][3],)
-                print
+                    print '{5:.2f}s - MSD:{0:.5f} - pmax: {6:.2f} / {7:.2f} - a:{2:.5f} - b:{3:.5f} - g:{4:.5f} - {1!s}'.\
+                        format(results[problem_id][subj_id][configuration][1], configuration,
+                               results[problem_id][subj_id][configuration][0][0],
+                               results[problem_id][subj_id][configuration][0][1],
+                               results[problem_id][subj_id][configuration][0][2],
+                               time.time() - t_config,
+                               results[problem_id][subj_id][configuration][2],
+                               results[problem_id][subj_id][configuration][3],)
+                    print
 
-            print 'time elapsed for subject {}: {}'.format(subj_id, time.time() - t_subj)
+                print 'time elapsed for subject {}: {}'.format(subj_id, time.time() - t_subj)
 
     save_results(constants.RESULTS_FILE_PATH, results_filename, results)
 
