@@ -4,7 +4,7 @@ close all;
 % CONSTANTS for subroutines
 SAVE_SINGLE_BEST_MODELS = 0;
 SAVE_SUBSET_BEST_MODELS = 0;
-PLOT_FIGURES = 0;
+PLOT_FIGURES = 1;
 STATES_ANALYSIS = 0;
 REWARD_FUNCTIONS_ANALYSIS = 0;
 CORRELATION_ANALYSIS = 0;
@@ -107,9 +107,8 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
                 best_models(res_idx,:) = [prob_idx, subj_idx, weighted_average_params];
                 
                 if PLOT_FIGURES
-                    plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,RND_THRESHOLD,best_aics);
+                    plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,RND_THRESHOLD,best_aics,sorted_configs);
                 end
-                
             end
 
             %% Save the subset of best models 
