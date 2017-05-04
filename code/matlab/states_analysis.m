@@ -18,21 +18,26 @@ function states_analysis(best_multiple_models)
     blue = [43,131,186]/255;
     black = [0.5,0.5,0.5];
     
-    %% extract model categories from best models 
+    %% extract state-space and learning rule categories from best models 
     states = [];
     for subj_idx = 1:length(best_multiple_models)
-        states = [states; best_multiple_models{1,subj_idx}{1,2}(:,1)];
+        states = [states; best_multiple_models{1,subj_idx}{1,2}(1:2,1), best_multiple_models{1,subj_idx}{1,2}(1:2,2)];
     end
-
-                                                                  %better   %better     %all models
-                                                                  %than     %than
-                                                                  %random   %random
-                                                                  %(2)      %(10)
-                                                                
-    num_full_history = sum(strcmp(states,'full_history'));        %142      %133        %142
-    num_latest_outcome = sum(strcmp(states,'latest_outcome'));    %120      %114        %120
-    num_stateless = sum(strcmp(states,'stateless'));              %57       %54         %57
     
+    % for frequency estimation consider only avg-tracking 
+    % (no qlearning as it would make the bins uneven)
+    
+
+                                                                                                        
+                                                                                                        
+                                                                                                        
+                                                                                                             %threshold
+                                                                                                             % 2    10
+    num_full_history   = sum(strcmp(states(:,1),'full_history')   .* strcmp(states(:,2),'avg_tracking'));    %60    57          
+    num_latest_outcome = sum(strcmp(states(:,1),'latest_outcome') .* strcmp(states(:,2),'avg_tracking'));    %50    48 
+    num_stateless      = sum(strcmp(states(:,1),'stateless')      .* strcmp(states(:,2),'avg_tracking'));    %57    54   
+    
+    %strcmp(states(:,1),'full_history') && strcmp(states(:,2),'avg_tracking')
     %% Chi-squared 
     
     observed_counts = [num_full_history, num_latest_outcome, num_stateless];
