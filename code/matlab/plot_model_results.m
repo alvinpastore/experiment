@@ -14,6 +14,22 @@ function plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,R
     black = [0.5,0.5,0.5];
     mustard = [235, 156, 20]/255;
     
+%     red = [235, 49, 20]/255;
+%     orange = [235, 88, 20]/255;
+%     mustard = [235, 156, 20]/255;
+%     yellow = [235, 217, 20]/255;
+%     green1 = [175, 222, 33]/255;
+%     green2 = [69, 210, 45]/255;
+%     tale = [28, 227, 154]/255;
+%     blue1 = [28, 227, 207]/255;
+%     blue2 = [28, 210, 227]/255;
+%     blue3 = [28, 161, 227]/255;
+%     blue4 = [34, 90, 221]/255;
+%     purple = [144, 117, 219]/255;
+%     lavander = [184, 117, 219]/255;
+%     pink1 = [219, 117, 219]/255;
+%     pink2 = [219, 117, 155]/255;
+    
     state_space_colors = {'stateless',orange;'latest_outcome',blue;'full_history',green};
 
     fh = figure();
