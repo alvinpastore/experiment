@@ -14,24 +14,34 @@ function plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,R
     black = [0.5,0.5,0.5];
     mustard = [235, 156, 20]/255;
     
-%     red = [235, 49, 20]/255;
-%     orange = [235, 88, 20]/255;
-%     mustard = [235, 156, 20]/255;
-%     yellow = [235, 217, 20]/255;
-%     green1 = [175, 222, 33]/255;
-%     green2 = [69, 210, 45]/255;
-%     tale = [28, 227, 154]/255;
-%     blue1 = [28, 227, 207]/255;
-%     blue2 = [28, 210, 227]/255;
-%     blue3 = [28, 161, 227]/255;
-%     blue4 = [34, 90, 221]/255;
-%     purple = [144, 117, 219]/255;
-%     lavander = [184, 117, 219]/255;
-%     pink1 = [219, 117, 219]/255;
-%     pink2 = [219, 117, 155]/255;
+    red = [235, 49, 20]/255;
+    orange = [235, 88, 20]/255;
+    mustard = [235, 156, 20]/255;
+    yellow = [235, 217, 20]/255;
+    green1 = [175, 222, 33]/255;
+    green2 = [69, 210, 45]/255;
+    green3 = [38, 147, 60]/255;
+    tale = [28, 227, 154]/255;
+    blue1 = [28, 227, 207]/255;
+    blue2 = [28, 210, 227]/255;
+    blue3 = [28, 161, 227]/255;
+    blue4 = [34, 90, 221]/255;
+    purple = [144, 117, 219]/255;
+    lavander = [184, 117, 219]/255;
+    pink1 = [219, 117, 219]/255;
+    pink2 = [219, 117, 155]/255;
     
-    state_space_colors = {'stateless',orange;'latest_outcome',blue;'full_history',green};
-
+    state_space_colors = {'stateless_avg_tracking',yellow;
+                          'full_history_q_learning',blue3;
+                          'full_history_avg_tracking',blue4;
+                          'latest_outcome_q_learning',green2;
+                          'latest_outcome_avg_tracking',green3};
+%     full_history_ql, blue3
+%     full_history_at, blue4
+%     latest_outcome_ql, green2
+%     latest_outcome_at, green3
+%     stateless, yellow
+    
     fh = figure();
     TITLE = ['Subject ',num2str(subj_idx)];
     hold on;
@@ -43,19 +53,23 @@ function plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,R
     % loop over the best_aics
     for bar_idx = 1:number_best_models
         
-        switch sorted_configs{bar_idx}
+        switch strcat(sorted_configs{bar_idx,1},'_',sorted_configs{bar_idx,2})
             case state_space_colors{1,1}
                 bar_color = state_space_colors{1,2};
             case state_space_colors{2,1}
                 bar_color = state_space_colors{2,2};
             case state_space_colors{3,1}
                 bar_color = state_space_colors{3,2};
+            case state_space_colors{4,1}
+                bar_color = state_space_colors{4,2};
+            case state_space_colors{5,1}
+                bar_color = state_space_colors{5,2};
         end
         
-        bar(bar_idx,sorted_aic(bar_idx),'FaceColor',bar_color);
+        h(bar_idx) = bar(bar_idx,sorted_aic(bar_idx),'FaceColor',bar_color);
     end
     
-    bar(number_best_models+1:number_total_models,sorted_aic(number_best_models+1:end),'FaceColor',red);
+    h(bar_idx+1) = bar(number_best_models+1:number_total_models,sorted_aic(number_best_models+1:end),'FaceColor',red);
     %plot([0 length(DEG_OF_FREEDOM)+2],[r_AIC-RND_THRESHOLD,r_AIC-RND_THRESHOLD],'Color',red,'LineStyle','--','LineWidth',LW)
     ylabel('AIC');
     xlabel('Models');
@@ -63,6 +77,7 @@ function plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,R
     %axis([0 length(DEG_OF_FREEDOM)+2 min(min(aic),min(bic))-RND_THRESHOLD 295]);   with random bar
     axis([0 length(DEG_OF_FREEDOM)+1 min(min(sorted_aic),min(bic))-RND_THRESHOLD max(sorted_aic)+5]);
     xticks([]);
+    legend(h(end),'Discarded models');
     set(gca,'FontSize',FS);
 
 

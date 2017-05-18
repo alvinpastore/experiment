@@ -1,5 +1,5 @@
 function reward_functions_analysis(best_multiple_models)
-%REWARD_FUNCTIONS_ANALYSIS Summary of this function goes here
+%REWARD_FUNCTIONS_ANALYSIS 
 %Perform a pearson chi-squared test of the null hypothesis that the best
 %models selected are equally distributed in the categories of reward function adopted.
 %Is the variation due to chance or due to the variable tested (category)?

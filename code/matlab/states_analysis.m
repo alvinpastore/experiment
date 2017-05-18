@@ -181,7 +181,7 @@ function states_analysis(best_multiple_models)
         %xlabel('State-space configuration');
         ylabel('Count');
         xticks([1,2,3,4,5]);
-        xticklabels({'Full QL','Latest QL','Full AT','Latest AT','Stateless'});
+        xticklabels({'Full QL','Full AT','Latest QL','Latest AT','Stateless'});
 
         set(gca,'FontSize',FONTSIZE+5);
         hold off;
