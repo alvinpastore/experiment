@@ -4,14 +4,16 @@ close all;
 % CONSTANTS for subroutines
 SAVE_SINGLE_BEST_MODELS = 0;
 SAVE_SUBSET_BEST_MODELS = 0;
-PLOT_FIGURES = 1;
+PLOT_FIGURES = 0;
+PLOT_SUBJ_SUBSET = 4; % number of subjects to plot for each condition
 STATES_ANALYSIS = 0;
 REWARD_FUNCTIONS_ANALYSIS = 0;
 CORRELATION_ANALYSIS = 0;
+MODEL_SUMMARY_LATEX = 1;
 
 % Subset generation method 
 % 1 -> delta_AIC; 2 -> AIC weights 
-SUBSET_METHOD = 2;
+SUBSET_METHOD = 2;  %delta_AIC needs adjusting line 117 AICw value not defined
 
 % threshold criteria for model selection
 AIC_DIFF_THRESHOLD = 2;  % Burnham Anderson 2002 page 131
@@ -31,6 +33,7 @@ fclose(fid);
 results = cell2mat(results_data(1:6));  
 % cell array of strings (it can be reduced to the first 15 and use an offset multiplication)
 configurations = horzcat(results_data{7:end}); 
+
 
 %% Find and store best model for each player
 
@@ -57,13 +60,12 @@ multiple_model_idx = 1;
 for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
     
     % get subset of results for prob_id
-    prob_results_all_probs = results(results(:,1) == prob_idx,:);
+    prob_results_all_subjs = results(results(:,1) == prob_idx,:);
     
     for subj_idx = 1:SUBJS_NUMBER % subjects ids start from 1
         
-        
         % get the subject results
-        subj_res = prob_results_all_probs(prob_results_all_probs(:,2) == subj_idx,:);
+        subj_res = prob_results_all_subjs(prob_results_all_subjs(:,2) == subj_idx,:);
         
         [aic,bic] = aicbic(-subj_res(:,3), DEG_OF_FREEDOM, N_TRIALS);
         
@@ -106,7 +108,7 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
                 res_idx = (prob_idx * SUBJS_NUMBER) + subj_idx;
                 best_models(res_idx,:) = [prob_idx, subj_idx, weighted_average_params];
                 
-                if PLOT_FIGURES
+                if PLOT_FIGURES && subj_idx <= PLOT_SUBJ_SUBSET
                     plot_model_results(subj_idx,DEG_OF_FREEDOM,sorted_aic,bic,r_AIC,r_BIC,RND_THRESHOLD,best_aics,sorted_configs);
                 end
             end
@@ -120,6 +122,10 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
             disp(['Subj: ',num2str(subj_idx),': no model better than random']);
         end
     end
+end
+
+if MODEL_SUMMARY_LATEX
+    models_summary(results,configurations,best_multiple_models);
 end
 
 % Store single models only if weighted avg was used 
@@ -147,4 +153,4 @@ end
 %Matrix_2 = Matrix_1( [1:2,4:8,10:end] , : ) method to remove a row from a
 %matrix (in case it is necessary to remove models, maybe outliers) 
  
-clearvars -except best_models best_multiple_models
+clearvars -except best_models best_multiple_models results configurations
