@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+\textbf{FH} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-15.7885} & \textbf{37.5771} & \textbf{2.1305} & \textbf{0.065323}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-15.7251} & \textbf{37.4501} & \textbf{2.0036} & \textbf{0.069605}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-15.7233} & \textbf{35.4466} & \textbf{0} & \textbf{0.18954}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-15.8017} & \textbf{35.6033} & \textbf{0.15678} & \textbf{0.17525}\\ 
+LO & AT & PT & 2 & -18.4858 & 40.9716 & 5.525 & 0.011966\\ 
+\textbf{LO} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-17.3265} & \textbf{38.653} & \textbf{3.2065} & \textbf{0.038145}\\ 
+LO & QL & PT & 3 & -17.1467 & 40.2934 & 4.8469 & 0.016797\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-16.5816} & \textbf{39.1632} & \textbf{3.7166} & \textbf{0.029556}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-16.2936} & \textbf{38.5873} & \textbf{3.1407} & \textbf{0.039419}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-17.4169} & \textbf{38.8339} & \textbf{3.3873} & \textbf{0.034846}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-16.4902} & \textbf{36.9805} & \textbf{1.5339} & \textbf{0.088029}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-16.4119} & \textbf{36.8238} & \textbf{1.3772} & \textbf{0.095201}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-16.2247} & \textbf{38.4495} & \textbf{3.0029} & \textbf{0.042231}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-16.729} & \textbf{37.4579} & \textbf{2.0114} & \textbf{0.069334}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-17.4197} & \textbf{38.8393} & \textbf{3.3928} & \textbf{0.034752}\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 1 - subject 11} 
+\label{table:models_summary_subj_11}
+\end{table} 

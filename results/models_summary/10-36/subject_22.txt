@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+\textbf{FH} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-125.4983} & \textbf{256.9966} & \textbf{2.0001} & \textbf{0.060225}\\ 
+FH & QL & TH & 3 & -130.5753 & 267.1505 & 12.154 & 0.00037574\\ 
+SS & AT & TH & 2 & -130.5752 & 265.1504 & 10.1539 & 0.0010214\\ 
+\textbf{SS} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-125.4983} & \textbf{254.9966} & \textbf{0} & \textbf{0.16371}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-125.9622} & \textbf{255.9243} & \textbf{0.92778} & \textbf{0.10295}\\ 
+LO & AT & TH & 2 & -130.5752 & 265.1504 & 10.1539 & 0.0010214\\ 
+\textbf{LO} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-125.9622} & \textbf{257.9244} & \textbf{2.9279} & \textbf{0.037871}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-125.9622} & \textbf{257.9244} & \textbf{2.9279} & \textbf{0.037871}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-125.4983} & \textbf{256.9966} & \textbf{2.0001} & \textbf{0.060225}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-125.9622} & \textbf{255.9243} & \textbf{0.92778} & \textbf{0.10295}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-125.4983} & \textbf{254.9966} & \textbf{0} & \textbf{0.16371}\\ 
+FH & AT & TH & 2 & -130.5752 & 265.1504 & 10.1539 & 0.0010214\\ 
+LO & QL & TH & 3 & -130.5753 & 267.1505 & 12.154 & 0.00037574\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-125.9622} & \textbf{255.9243} & \textbf{0.92778} & \textbf{0.10295}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-125.4983} & \textbf{254.9966} & \textbf{0} & \textbf{0.16371}\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 2 - subject 22} 
+\label{table:models_summary_subj_22}
+\end{table} 

@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+FH & QL & ID & 3 & -130.8378 & 267.6757 & 32.803 & 4.9167e-08\\ 
+FH & QL & TH & 3 & -130.0774 & 266.1549 & 31.2821 & 1.0518e-07\\ 
+SS & AT & TH & 2 & -138.6294 & 281.2589 & 46.3862 & 5.5223e-11\\ 
+SS & AT & ID & 2 & -138.6294 & 281.2589 & 46.3862 & 5.5223e-11\\ 
+\textbf{LO} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-116.8938} & \textbf{237.7876} & \textbf{2.9148} & \textbf{0.15198}\\ 
+LO & AT & TH & 2 & -138.6294 & 281.2589 & 46.3862 & 5.5223e-11\\ 
+\textbf{LO} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-114.4364} & \textbf{234.8727} & \textbf{0} & \textbf{0.65275}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-116.6231} & \textbf{239.2461} & \textbf{4.3734} & \textbf{0.073294}\\ 
+LO & QL & ID & 3 & -134.1573 & 274.3147 & 39.442 & 1.7784e-09\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-117.8069} & \textbf{239.6138} & \textbf{4.7411} & \textbf{0.060986}\\ 
+FH & AT & ID & 2 & -138.6294 & 281.2589 & 46.3862 & 5.5223e-11\\ 
+FH & AT & TH & 2 & -138.6294 & 281.2589 & 46.3862 & 5.5223e-11\\ 
+LO & QL & TH & 3 & -126.516 & 259.0321 & 24.1593 & 3.7035e-06\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-117.8069} & \textbf{239.6138} & \textbf{4.7411} & \textbf{0.060986}\\ 
+LO & AT & ID & 2 & -138.6294 & 281.2589 & 46.3862 & 5.5223e-11\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 1 - subject 8} 
+\label{table:models_summary_subj_8}
+\end{table} 

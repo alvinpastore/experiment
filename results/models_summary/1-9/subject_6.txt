@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+\textbf{FH} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-133.763} & \textbf{273.5259} & \textbf{1.3475} & \textbf{0.092173}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-133.526} & \textbf{273.0521} & \textbf{0.87367} & \textbf{0.11681}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-134.0892} & \textbf{272.1784} & \textbf{0} & \textbf{0.1808}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-134.2173} & \textbf{272.4346} & \textbf{0.25617} & \textbf{0.15907}\\ 
+LO & AT & PT & 2 & -137.9533 & 279.9066 & 7.7282 & 0.0037936\\ 
+\textbf{LO} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-135.4501} & \textbf{274.9003} & \textbf{2.7219} & \textbf{0.046362}\\ 
+LO & QL & PT & 3 & -136.5323 & 279.0646 & 6.8862 & 0.0057795\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-134.7423} & \textbf{275.4846} & \textbf{3.3062} & \textbf{0.034616}\\ 
+LO & QL & ID & 3 & -135.4891 & 276.9781 & 4.7997 & 0.016404\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-135.8363} & \textbf{275.6726} & \textbf{3.4941} & \textbf{0.031511}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-134.9497} & \textbf{273.8994} & \textbf{1.721} & \textbf{0.076472}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-134.8077} & \textbf{273.6153} & \textbf{1.4369} & \textbf{0.088142}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-135.0187} & \textbf{276.0374} & \textbf{3.859} & \textbf{0.026257}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-134.9401} & \textbf{273.8802} & \textbf{1.7017} & \textbf{0.077211}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-135.4891} & \textbf{274.9781} & \textbf{2.7997} & \textbf{0.044592}\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 1 - subject 6} 
+\label{table:models_summary_subj_6}
+\end{table} 

@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+\textbf{FH} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-39.6347} & \textbf{85.2695} & \textbf{2} & \textbf{0.033522}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-39.6882} & \textbf{85.3765} & \textbf{2.107} & \textbf{0.031776}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-39.6882} & \textbf{83.3765} & \textbf{0.10701} & \textbf{0.086375}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-39.6347} & \textbf{83.2694} & \textbf{0} & \textbf{0.091123}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-39.6451} & \textbf{83.2901} & \textbf{0.020678} & \textbf{0.090185}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-39.6882} & \textbf{83.3765} & \textbf{0.10701} & \textbf{0.086375}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-39.6451} & \textbf{85.2901} & \textbf{2.0207} & \textbf{0.033177}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-39.6451} & \textbf{85.2901} & \textbf{2.0207} & \textbf{0.033177}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-39.6347} & \textbf{85.2695} & \textbf{2} & \textbf{0.033522}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-39.6451} & \textbf{83.2901} & \textbf{0.020678} & \textbf{0.090185}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-39.6347} & \textbf{83.2694} & \textbf{0} & \textbf{0.091123}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-39.6882} & \textbf{83.3765} & \textbf{0.10701} & \textbf{0.086375}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-39.6882} & \textbf{85.3765} & \textbf{2.107} & \textbf{0.031776}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-39.6451} & \textbf{83.2901} & \textbf{0.020678} & \textbf{0.090185}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-39.6347} & \textbf{83.2694} & \textbf{0} & \textbf{0.091123}\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 3 - subject 33} 
+\label{table:models_summary_subj_33}
+\end{table} 

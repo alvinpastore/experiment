@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+\textbf{FH} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-125.6685} & \textbf{257.337} & \textbf{2.0001} & \textbf{0.048432}\\ 
+FH & QL & TH & 3 & -127.4798 & 260.9596 & 5.6227 & 0.0079159\\ 
+\textbf{SS} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-127.4797} & \textbf{258.9595} & \textbf{3.6226} & \textbf{0.021519}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-125.6685} & \textbf{255.3369} & \textbf{0} & \textbf{0.13166}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-125.808} & \textbf{255.616} & \textbf{0.27911} & \textbf{0.11451}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-127.4797} & \textbf{258.9595} & \textbf{3.6226} & \textbf{0.021519}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-125.8081} & \textbf{257.6161} & \textbf{2.2792} & \textbf{0.042124}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-125.8081} & \textbf{257.6161} & \textbf{2.2792} & \textbf{0.042124}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-125.6685} & \textbf{257.337} & \textbf{2.0001} & \textbf{0.048432}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-125.808} & \textbf{255.616} & \textbf{0.27911} & \textbf{0.11451}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-125.6685} & \textbf{255.3369} & \textbf{0} & \textbf{0.13166}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-127.4797} & \textbf{258.9595} & \textbf{3.6226} & \textbf{0.021519}\\ 
+LO & QL & TH & 3 & -127.4798 & 260.9596 & 5.6227 & 0.0079159\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-125.808} & \textbf{255.616} & \textbf{0.27911} & \textbf{0.11451}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-125.6685} & \textbf{255.3369} & \textbf{0} & \textbf{0.13166}\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 2 - subject 16} 
+\label{table:models_summary_subj_16}
+\end{table} 

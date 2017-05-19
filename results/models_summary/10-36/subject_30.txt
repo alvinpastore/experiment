@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+\textbf{FH} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-46.0497} & \textbf{98.0994} & \textbf{0} & \textbf{0.12972}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-46.1309} & \textbf{98.2619} & \textbf{0.16242} & \textbf{0.1196}\\ 
+SS & AT & TH & 2 & -49.2769 & 102.5538 & 4.4544 & 0.013988\\ 
+\textbf{SS} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-48.3362} & \textbf{100.6725} & \textbf{2.573} & \textbf{0.035832}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-48.4398} & \textbf{100.8796} & \textbf{2.7801} & \textbf{0.032307}\\ 
+LO & AT & TH & 2 & -49.2769 & 102.5538 & 4.4544 & 0.013988\\ 
+\textbf{LO} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-46.067} & \textbf{98.134} & \textbf{0.034525} & \textbf{0.1275}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-46.067} & \textbf{98.134} & \textbf{0.034525} & \textbf{0.1275}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-46.0497} & \textbf{98.0994} & \textbf{0} & \textbf{0.12972}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-48.4398} & \textbf{100.8796} & \textbf{2.7801} & \textbf{0.032307}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-48.3362} & \textbf{100.6725} & \textbf{2.573} & \textbf{0.035832}\\ 
+FH & AT & TH & 2 & -49.2769 & 102.5538 & 4.4544 & 0.013988\\ 
+\textbf{LO} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-46.1309} & \textbf{98.2619} & \textbf{0.16242} & \textbf{0.1196}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-48.4398} & \textbf{100.8796} & \textbf{2.7801} & \textbf{0.032307}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-48.3362} & \textbf{100.6725} & \textbf{2.573} & \textbf{0.035832}\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 3 - subject 30} 
+\label{table:models_summary_subj_30}
+\end{table} 

@@ -1,0 +1,26 @@
+\begin{table}[!ht] 
+\centering 
+\begin{tabular}{cccccccc} 
+\hline 
+\multicolumn{3}{c}{Config} & No. Par$_i$ & $\log(L_i)$ & AIC$_i$ & $\Delta_i$(AIC) & $w_i$(AIC)\\ 
+\hline 
+\textbf{FH} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-5.5574} & \textbf{17.1149} & \textbf{2} & \textbf{0.033075}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-5.5746} & \textbf{17.1492} & \textbf{2.0343} & \textbf{0.032512}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-5.5746} & \textbf{15.1492} & \textbf{0.034299} & \textbf{0.088377}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-5.5574} & \textbf{15.1149} & \textbf{0} & \textbf{0.089906}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-5.5631} & \textbf{15.1262} & \textbf{0.011301} & \textbf{0.0894}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-5.5746} & \textbf{15.1492} & \textbf{0.034299} & \textbf{0.088377}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-5.5631} & \textbf{17.1262} & \textbf{2.0113} & \textbf{0.032888}\\ 
+\textbf{FH} & \textbf{QL} & \textbf{PT} & \textbf{3} & \textbf{-5.5631} & \textbf{17.1262} & \textbf{2.0113} & \textbf{0.032888}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{ID} & \textbf{3} & \textbf{-5.5574} & \textbf{17.1149} & \textbf{2} & \textbf{0.033075}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-5.5631} & \textbf{15.1262} & \textbf{0.011301} & \textbf{0.0894}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-5.5574} & \textbf{15.1149} & \textbf{0} & \textbf{0.089906}\\ 
+\textbf{FH} & \textbf{AT} & \textbf{TH} & \textbf{2} & \textbf{-5.5746} & \textbf{15.1492} & \textbf{0.034299} & \textbf{0.088377}\\ 
+\textbf{LO} & \textbf{QL} & \textbf{TH} & \textbf{3} & \textbf{-5.5746} & \textbf{17.1492} & \textbf{2.0343} & \textbf{0.032512}\\ 
+\textbf{SS} & \textbf{AT} & \textbf{PT} & \textbf{2} & \textbf{-5.5631} & \textbf{15.1262} & \textbf{0.011301} & \textbf{0.0894}\\ 
+\textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-5.5574} & \textbf{15.1149} & \textbf{0} & \textbf{0.089906}\\ 
+\hline 
+\end{tabular} 
+\caption{Models summary: problem 2 - subject 21} 
+\label{table:models_summary_subj_21}
+\end{table} 
