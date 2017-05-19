@@ -21,6 +21,6 @@
 \textbf{LO} & \textbf{AT} & \textbf{ID} & \textbf{2} & \textbf{-88.9421} & \textbf{181.8841} & \textbf{0} & \textbf{0.09877}\\ 
 \hline 
 \end{tabular} 
-\caption{Models summary: problem 3 - subject 34} 
+\caption{Models summary: problem 3 - subject 10} 
 \label{table:models_summary_subj_34}
 \end{table} 

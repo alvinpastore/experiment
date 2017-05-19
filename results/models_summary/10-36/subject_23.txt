@@ -21,6 +21,6 @@ SS & AT & PT & 2 & -123.839 & 251.6781 & 124.1797 & 1.9122e-28\\
 LO & AT & ID & 2 & -121.2835 & 246.567 & 119.0687 & 2.4625e-27\\ 
 \hline 
 \end{tabular} 
-\caption{Models summary: problem 2 - subject 23} 
+\caption{Models summary: problem 2 - subject 11} 
 \label{table:models_summary_subj_23}
 \end{table} 
