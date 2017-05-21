@@ -2,12 +2,17 @@ function models_summary(results,configs,best_multiple_models)
 
     %best_models_summary Summary of this function goes here
     %Create LATEX tables from set of best models
-
+    
+    %write to file
+    SAVE_FILE = 0;
+    
+    %constants for calculations
     N_SUBJECTS = 12;
     N_PROBLEMS = 3;
     N_TRIALS = 200;
     DEG_OF_FREEDOM = get_dof(configs(1:15,2));
     
+    % latex end row and column text constants
     table_row_end = '\\\\ \n';
     ampersand = ' & ';
     
@@ -33,8 +38,12 @@ function models_summary(results,configs,best_multiple_models)
     ID = 'ID';
     TH = 'TH';
     
+    % variables to estimate percentage of subjects better than random
+    num_subjs_better_than_random = 0;    
+    
     for prob_idx = 0:N_PROBLEMS-1
         for subj_idx = 1:N_SUBJECTS
+            
             subj_id = subj_idx + (12*(prob_idx));
             
             disp(['subj id ',num2str(subj_id)]);
@@ -63,8 +72,7 @@ function models_summary(results,configs,best_multiple_models)
                              '\\multicolumn{3}{c}{Config} & No. Par$_i$ & $\\log(L_i)$ & AIC$_i$ & $\\Delta_i$(AIC) & $w_i$(AIC)',table_row_end,...
                              '\\hline \n'];
 
-            % TODO access the correct lines for each subject
-            % table content
+            % inspect each model in the 15 tested 
             for line_idx = 1:size(subj_models_results,1)
                 
                 % example
@@ -81,14 +89,23 @@ function models_summary(results,configs,best_multiple_models)
                 current_config = configs(line_idx,:);
                 b_wrap_l = '';
                 b_wrap_r = '';
-                for best_config_idx = 1:size(best_multiple_models{1,subj_id}{1,2},1)
+                
+                % count the number of models selected for the subject
+                if ~isempty(best_multiple_models{1,subj_id})
+                    num_best_models = size(best_multiple_models{1,subj_id}{1,2},1);
+                else
+                    num_best_models = 0;
+                end
+                    
+                % boldify latex text for the subject's selected models 
+                for best_config_idx = 1:num_best_models
                     current_best_conf = best_multiple_models{1,subj_id}{1,2}(best_config_idx,:);
                     if isempty(setdiff(current_config,current_best_conf))
                         b_wrap_l = '\\textbf{';
                         b_wrap_r = '}';
                     end
                 end
-                
+
                 % write state in latex row 
                 switch current_config{1}
                     case stateless
@@ -140,6 +157,9 @@ function models_summary(results,configs,best_multiple_models)
                 
             end
             
+            % update the count of subjects better than random
+            num_subjs_better_than_random = num_subjs_better_than_random + logical(num_best_models);
+                
             % outro
             latex_content = [latex_content, '\\hline \n',...
                             '\\end{tabular} \n',...
@@ -147,11 +167,16 @@ function models_summary(results,configs,best_multiple_models)
                             '\\label{table:models_summary_subj_', num2str(subj_id),'}\n',...
                             '\\end{table} \n'];
             
-            % save file 
-            fid = fopen(['subject_',num2str(subj_id),'.txt'],'wt');
-            fprintf(fid,latex_content);
-            fclose(fid);
-        end 
+            if SAVE_FILE 
+                % save file 
+                fid = fopen(['subject_',num2str(subj_id),'.txt'],'wt');
+                fprintf(fid,latex_content);
+                fclose(fid);
+            end
+        end
     end
+    disp(['Subjects modelled better than random ',...
+    num2str(num_subjs_better_than_random),'/',num2str(N_SUBJECTS*N_PROBLEMS),' = ',...
+    num2str(100*(num_subjs_better_than_random/(N_SUBJECTS*N_PROBLEMS))),'%']);
 end
 
