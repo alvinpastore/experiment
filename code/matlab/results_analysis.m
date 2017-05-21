@@ -17,7 +17,7 @@ SUBSET_METHOD = 2;  %delta_AIC needs adjusting line 117 AICw value not defined
 
 % threshold criteria for model selection
 AIC_DIFF_THRESHOLD = 2;  % Burnham Anderson 2002 page 131
-RND_THRESHOLD = 2;       % 10 is very strong evidence. 2 is bare minum!
+RND_THRESHOLD = 5;       % 10 is very strong evidence. 2 is bare minum!
 WEIGHT_THRESHOLD = 0.95; % "For a 95% confidence set on the actual K-L best model"  Burnham Anderson 2002 page 169
 
 %% LOAD DATA
@@ -119,6 +119,8 @@ for prob_idx = 0:PROBS_NUMBER-1 % problems ids start from 0
             best_multiple_models{multiple_model_idx} = {sorted_results(best_aics,:),sorted_configs(best_aics,:),sorted_aic(best_aics,:),AICw(best_aics,:)};
             multiple_model_idx = multiple_model_idx + 1;
         else
+            best_multiple_models{multiple_model_idx} = {};
+            multiple_model_idx = multiple_model_idx + 1;
             disp(['Subj: ',num2str(subj_idx),': no model better than random']);
         end
     end
