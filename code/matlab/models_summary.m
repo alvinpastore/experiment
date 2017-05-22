@@ -1,6 +1,6 @@
 function models_summary(results,configs,best_multiple_models)
 
-    %best_models_summary Summary of this function goes here
+    %best_models_summary 
     %Create LATEX tables from set of best models
     
     %write to file
@@ -40,6 +40,7 @@ function models_summary(results,configs,best_multiple_models)
     
     % variables to estimate percentage of subjects better than random
     num_subjs_better_than_random = 0;    
+    AICs_all_models = [];
     
     for prob_idx = 0:N_PROBLEMS-1
         for subj_idx = 1:N_SUBJECTS
@@ -62,6 +63,8 @@ function models_summary(results,configs,best_multiple_models)
             AICd = AICs-min(AICs);
             % get w_AICs
             AICw = exp(-.5.*AICd) ./ sum(exp(-.5.*AICd));
+            
+            AICs_all_models = [AICs_all_models,AICs];
             
             % WRITE TO FILE (LaTeX)
             % table intro
@@ -178,5 +181,10 @@ function models_summary(results,configs,best_multiple_models)
     disp(['Subjects modelled better than random ',...
     num2str(num_subjs_better_than_random),'/',num2str(N_SUBJECTS*N_PROBLEMS),' = ',...
     num2str(100*(num_subjs_better_than_random/(N_SUBJECTS*N_PROBLEMS))),'%']);
+    AICs_all_models = AICs_all_models(:)';
+    disp('Statistics on all AIC values');
+    disp(['Median: ',num2str(median(AICs_all_models))]);
+    disp(['Mean: ',num2str(mean(AICs_all_models))]);
+    
 end
 
