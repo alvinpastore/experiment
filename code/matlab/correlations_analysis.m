@@ -102,8 +102,9 @@ function correlations_analysis(best_models)
     %% hypothesis 2.1
     % Payoff variability vs Learning rate
     % 211 = hyp 2.1 condition 1
+    disp('PV-alpha');
     [rho_21,pval_21] = corr(PV,alpha,'Type','Spearman');
-    %disp(['Hypothesis 2.1 - rho: ',num2str(rho_21),' - pval: ',num2str(pval_21)]);
+    disp(['Hypothesis 2.1 - rho: ',num2str(rho_21),' - pval: ',num2str(pval_21)]);
 
     [rho_211,pval_211] = corr(PV(cond1),alpha(cond1),'Type','Spearman');
     [rho_212,pval_212] = corr(PV(cond2),alpha(cond2),'Type','Spearman');
@@ -152,8 +153,9 @@ function correlations_analysis(best_models)
 
     %% hypothesis 2.2
     % Payoff variability vs Greediness 
+    disp('PV-beta');
     [rho_22,pval_22] = corr(PV,beta,'Type','Spearman');
-    %disp(['Hypothesis 2.2 - rho: ',num2str(rho_22),' - pval: ',num2str(pval_22)]);
+    disp(['Hypothesis 2.2 - rho: ',num2str(rho_22),' - pval: ',num2str(pval_22)]);
 
     [rho_221,pval_221] = corr(PV(cond1),beta(cond1),'Type','Spearman');
     [rho_222,pval_222] = corr(PV(cond2),beta(cond2),'Type','Spearman');
@@ -203,7 +205,7 @@ function correlations_analysis(best_models)
     
     
     %TEMP scatterhist for cond 3 PV vs beta (only significant)
-    h3 = scatterhist(PV(cond3),beta(cond3),'NBins',[10,10],'Marker','d','MarkerSize',10)
+    h3 = scatterhist(PV(cond3),beta(cond3),'NBins',[10,10],'Marker','d','MarkerSize',10);
     hp = get(h3(1),'children'); set(hp,'LineWidth',2);
     hp = get(h3(2),'children'); set(hp,'LineWidth',2);
     hp = get(h3(3),'children'); set(hp,'LineWidth',2);
@@ -213,11 +215,12 @@ function correlations_analysis(best_models)
     set(gca,'FontSize',FONTSIZE);
     axis([20 40 -0.05 0.25]);
     hold off;
-    
+  
     %% hypothesis 3 accumulated outcomes
     % Performance vs Discount factor
+    disp('performance-gamma');
     [rho_3,pval_3] = corr(performances,gamma,'Type','Spearman');
-    %disp(['Hypothesis 3 - rho: ',num2str(rho_3),' - pval: ',num2str(pval_3)]);
+    disp(['Hypothesis 3 - rho: ',num2str(rho_3),' - pval: ',num2str(pval_3)]);
 
     disp('Final accumulated outcomes:');
     [rho_31,pval_31] = corr(performances(cond1),gamma(cond1),'Type','Spearman');
@@ -263,11 +266,13 @@ function correlations_analysis(best_models)
     xticklabels({'2.55','2.57','2.59'})
     set(gca,'FontSize',FONTSIZE);
     ylim([-0.1 1.1])
-    
 
     
     %% hypothesis 3 proportion of maximisation choices
     % Performance vs Discount factor
+    disp('pmax-gamma');
+    [rho_3,pval_3] = corr(pmax,gamma,'Type','Spearman');
+    disp(['Hypothesis 3 - rho: ',num2str(rho_3),' - pval: ',num2str(pval_3)]);
 
     [rho_31,pval_31] = corr(pmax(cond1),gamma(cond1),'Type','Spearman');
     [rho_32,pval_32] = corr(pmax(cond2),gamma(cond2),'Type','Spearman');
